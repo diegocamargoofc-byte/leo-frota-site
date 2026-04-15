@@ -557,8 +557,8 @@ export function HeroSection() {
       >
         <div className="flex flex-wrap items-center justify-between gap-y-3 py-4">
 
-          <div className="flex items-center gap-3">
-            {/* Star rating */}
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+            {/* Stars + rating */}
             <div className="flex items-center gap-1.5 shrink-0">
               <div style={{ display: "flex", gap: "1.5px" }}>
                 {[1,2,3,4,5].map(i => (
@@ -573,24 +573,27 @@ export function HeroSection() {
               </div>
               <span style={{ fontSize: "11px", fontWeight: 600, color: "rgba(212,168,71,0.70)", letterSpacing: "0.02em" }}>4.9</span>
             </div>
-            <div className="h-3 w-px shrink-0" style={{ background: "rgba(255,255,255,0.08)" }} />
-            <div className="flex -space-x-2">
-              {[1, 2, 3, 4].map(i => (
-                <img
-                  key={i}
-                  src={`/images/professionals/prof-${i}.jpg`}
-                  alt={`Profissional ${i}`}
-                  className="h-7 w-7 rounded-full object-cover"
-                  style={{ border: `2px solid ${BG}` }}
-                />
-              ))}
+            <div className="hidden sm:block h-3 w-px shrink-0" style={{ background: "rgba(255,255,255,0.08)" }} />
+            {/* Avatars + text */}
+            <div className="flex items-center gap-2.5 shrink-0">
+              <div className="flex -space-x-2 shrink-0">
+                {[1, 2, 3, 4].map(i => (
+                  <img
+                    key={i}
+                    src={`/images/professionals/prof-${i}.jpg`}
+                    alt={`Profissional ${i}`}
+                    className="h-7 w-7 rounded-full object-cover"
+                    style={{ border: `2px solid ${BG}` }}
+                  />
+                ))}
+              </div>
+              <p style={{ fontSize: "11.5px", color: "rgba(255,255,255,0.36)", lineHeight: 1.4, whiteSpace: "nowrap" }}>
+                +500 profissionais{" "}
+                <span style={{ color: "rgba(255,255,255,0.58)", fontWeight: 500 }}>
+                  transformaram sua imagem
+                </span>
+              </p>
             </div>
-            <p style={{ fontSize: "11.5px", color: "rgba(255,255,255,0.36)", lineHeight: 1.4 }}>
-              +500 profissionais{" "}
-              <span style={{ color: "rgba(255,255,255,0.58)", fontWeight: 500 }}>
-                transformaram sua imagem
-              </span>
-            </p>
           </div>
 
           <div
