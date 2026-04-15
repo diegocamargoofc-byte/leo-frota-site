@@ -2,50 +2,35 @@
 
 import { useEffect, useState, useRef } from "react"
 import { ArrowRight, MapPin, Calendar, Clock } from "lucide-react"
+import { HeroShapesBackground } from "@/components/ui/shape-landing-hero"
 
 const EASE = "cubic-bezier(0.16,1,0.3,1)"
 const BG   = "#03070f"
 
+// Image natural size: 408 × 612 px  →  aspect ratio 2:3
+// Card never exceeds 400px wide → no upscaling, always sharp
+const CARD_MAX_W = 400
+
 export function HeroSection() {
   const [mounted, setMounted] = useState(false)
   const sectionRef = useRef<HTMLElement>(null)
-  const cardRef    = useRef<HTMLDivElement>(null)   // parallax — scroll-driven translateY
 
   useEffect(() => {
     const t = setTimeout(() => setMounted(true), 60)
-    let rafQueued = false
-
-    const onScroll = () => {
-      if (!sectionRef.current) return
-      if (sectionRef.current.getBoundingClientRect().bottom < 0) return
-      if (rafQueued) return
-      rafQueued = true
-      requestAnimationFrame(() => {
-        rafQueued = false
-        // Card drifts down slightly — very subtle, no rotation, no 3D
-        if (cardRef.current) {
-          cardRef.current.style.transform = `translateY(${window.scrollY * 0.028}px)`
-        }
-      })
-    }
-
-    window.addEventListener("scroll", onScroll, { passive: true })
-    return () => { clearTimeout(t); window.removeEventListener("scroll", onScroll) }
+    return () => clearTimeout(t)
   }, [])
 
   const fade = (d: number, dur = 650): React.CSSProperties =>
     !mounted ? { opacity: 0 } : { animation: `hero-enter-soft ${dur}ms ${EASE} ${d}ms both` }
 
-  const wordIn = (d: number): React.CSSProperties =>
-    !mounted ? { opacity: 0 } : { animation: `word-enter 660ms ${EASE} ${d}ms both` }
+  const headlineUp = (d: number, dur = 720): React.CSSProperties =>
+    !mounted
+      ? { opacity: 0 }
+      : { animation: `headline-fade-up ${dur}ms cubic-bezier(0.22,1,0.36,1) ${d}ms both` }
 
-  const stamp = (d: number): React.CSSProperties =>
-    !mounted ? { transform: "translateY(108%)" } : { animation: `line-reveal 760ms ${EASE} ${d}ms both` }
-
-  // Card entrance is separate from the scroll transform — different elements to avoid conflict
   const cardEntrance: React.CSSProperties = !mounted
     ? { opacity: 0 }
-    : { animation: `hero-enter-card 900ms ${EASE} 100ms both` }
+    : { animation: `hero-enter-card 900ms ${EASE} 80ms both` }
 
   return (
     <section
@@ -59,144 +44,223 @@ export function HeroSection() {
       }}
     >
 
-      {/* ════════════════════════════════════════════════════
+      {/* ── Shape background — floating pill shapes, z-0 ── */}
+      <HeroShapesBackground />
+
+      {/* ── Atmospheric background layers ── */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden z-0" aria-hidden="true">
+        {/* Right bloom — aligns with the card column, significantly stronger */}
+        <div style={{
+          position: "absolute", top: "-5%", right: "-10%",
+          width: "62%", height: "90%",
+          background: "radial-gradient(ellipse at 62% 28%, rgba(0,65,155,0.26) 0%, rgba(0,40,110,0.12) 40%, transparent 68%)",
+          filter: "blur(48px)",
+        }} />
+        {/* Secondary focal spot — tighter, centered on card position */}
+        <div style={{
+          position: "absolute", top: "10%", right: "0%",
+          width: "42%", height: "70%",
+          background: "radial-gradient(ellipse at 70% 38%, rgba(0,80,180,0.18) 0%, rgba(0,50,130,0.08) 45%, transparent 72%)",
+          filter: "blur(36px)",
+        }} />
+        {/* Left counter-light — text side, subtle warmth */}
+        <div style={{
+          position: "absolute", top: "15%", left: "-12%",
+          width: "48%", height: "65%",
+          background: "radial-gradient(ellipse at 28% 42%, rgba(0,30,80,0.10) 0%, transparent 68%)",
+          filter: "blur(60px)",
+        }} />
+        {/* Gold bloom — premium warmth behind text column, breaks cold monochrome */}
+        <div style={{
+          position: "absolute", bottom: "8%", left: "-5%",
+          width: "44%", height: "52%",
+          background: "radial-gradient(ellipse at 25% 75%, rgba(180,130,20,0.09) 0%, rgba(140,100,10,0.04) 45%, transparent 70%)",
+          filter: "blur(52px)",
+        }} />
+        {/* Bottom grounding shadow */}
+        <div style={{
+          position: "absolute", bottom: 0, left: 0, right: 0, height: "30%",
+          background: "linear-gradient(to top, rgba(1,3,8,0.5) 0%, transparent 100%)",
+        }} />
+        {/* Vignette layer 1 — broad edge darkening */}
+        <div style={{
+          position: "absolute", inset: 0,
+          background: "radial-gradient(ellipse 78% 75% at 50% 42%, transparent 30%, rgba(0,0,0,0.52) 100%)",
+        }} />
+        {/* Vignette layer 2 — corner punch, seals the 4 edges */}
+        <div style={{
+          position: "absolute", inset: 0,
+          background: "radial-gradient(ellipse 60% 60% at 50% 50%, transparent 25%, rgba(0,0,0,0.28) 100%)",
+        }} />
+        {/* Fine grain — tactile texture, very subtle */}
+        <div style={{
+          position: "absolute", inset: 0,
+          backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.88' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E")`,
+          opacity: 0.028, mixBlendMode: "overlay",
+        }} />
+      </div>
+
+      {/* ══════════════════════════════════════════
           ROW 1 — MASTHEAD
-      ════════════════════════════════════════════════════ */}
+      ══════════════════════════════════════════ */}
       <div
-        className="relative z-20 flex items-center justify-between border-b border-t px-6 sm:px-8 lg:px-12 xl:px-16"
+        className="relative z-20 flex items-center justify-between border-b px-6 sm:px-8 lg:px-12 xl:px-16"
         style={{ borderColor: "rgba(255,255,255,0.05)", ...fade(0, 500) }}
       >
         <div className="flex items-center gap-2.5">
-          <div className="h-[5px] w-[5px] rounded-full" style={{ background: "rgba(0,191,255,0.5)" }} />
+          <div className="h-[5px] w-[5px] rounded-full" style={{
+            background: "#D4A847",
+            boxShadow: "0 0 6px rgba(212,168,71,0.7)",
+          }} />
           <span style={{
             fontSize: "9.5px", fontWeight: 700, letterSpacing: "0.24em",
-            textTransform: "uppercase", color: "rgba(255,255,255,0.28)",
+            textTransform: "uppercase", color: "rgba(212,168,71,0.65)",
           }}>
-            Evento Presencial
+            Imersão Exclusiva
           </span>
         </div>
 
         <div
           className="absolute left-1/2 -translate-x-1/2 hidden md:flex items-center gap-3"
-          style={{ fontSize: "9.5px", fontWeight: 500, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(255,255,255,0.15)" }}
+          style={{ fontSize: "9.5px", fontWeight: 500, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(255,255,255,0.30)" }}
         >
-          <span>23 Abr 2025</span>
-          <span style={{ color: "rgba(255,255,255,0.07)" }}>·</span>
+          <span>14 Mai 2026</span>
+          <span style={{ color: "rgba(255,255,255,0.12)" }}>·</span>
           <span>SEST SENAT</span>
-          <span style={{ color: "rgba(255,255,255,0.07)" }}>·</span>
+          <span style={{ color: "rgba(255,255,255,0.12)" }}>·</span>
           <span>18h – 22h</span>
         </div>
 
         <span style={{
           fontSize: "9.5px", fontWeight: 500, letterSpacing: "0.16em",
-          textTransform: "uppercase", color: "rgba(255,255,255,0.15)",
+          textTransform: "uppercase", color: "rgba(255,255,255,0.28)",
         }}>
-          Abr 2025
+          Mai 2026
         </span>
       </div>
 
 
-      {/* ════════════════════════════════════════════════════
+      {/* ══════════════════════════════════════════
           ROW 2 — MAIN CONTENT
-          flex-col on mobile (card top, text below)
-          flex-row on desktop (text left, card right)
-      ════════════════════════════════════════════════════ */}
-      <div className="relative overflow-hidden">
-        <div className="flex flex-col lg:flex-row lg:items-center lg:h-full px-6 sm:px-8 lg:px-12 xl:px-16 py-8 lg:py-0 gap-7 lg:gap-10 xl:gap-14">
+          Mobile  → 1 coluna: card em cima, texto embaixo
+          Desktop → 2 colunas: [texto 1fr] [card 400px]
+          Grid garante largura explícita para cada coluna —
+          sem risco de texto comprimido ou card ocupando tudo.
+      ══════════════════════════════════════════ */}
+      <div className="relative z-10 grid grid-cols-1 lg:grid-cols-[1fr_360px] xl:grid-cols-[1fr_380px] lg:items-center px-6 sm:px-8 lg:px-12 xl:px-16 py-8 lg:py-0 gap-8 lg:gap-8 xl:gap-10 max-w-[1100px] xl:max-w-[1200px] mx-auto w-full">
 
-          {/* ── TEXT COLUMN ── left on desktop, bottom on mobile */}
-          <div className="flex-1 min-w-0 lg:order-first">
+        {/* ── TEXT COLUMN ─────────────────────────── */}
+        <div className="relative z-20 order-2 lg:order-1 flex flex-col justify-center lg:py-14">
 
-            {/* Eyebrow */}
-            <div className="mb-8 md:mb-10 flex items-center gap-3" style={fade(60)}>
-              <div className="h-px w-5 shrink-0" style={{
-                background: "linear-gradient(to right, transparent, rgba(0,191,255,0.5))",
+          {/* Eyebrow — gold credential pill */}
+          <div className="mb-7 md:mb-9" style={fade(60)}>
+            <div style={{
+              display: "inline-flex", alignItems: "center", gap: "8px",
+              padding: "5px 14px 5px 10px",
+              border: "1px solid rgba(212,168,71,0.25)",
+              borderRadius: "100px",
+              background: "linear-gradient(135deg, rgba(212,168,71,0.07) 0%, transparent 100%)",
+              backdropFilter: "blur(4px)",
+            }}>
+              <div style={{
+                width: 6, height: 6, borderRadius: "50%",
+                background: "#D4A847",
+                boxShadow: "0 0 8px rgba(212,168,71,0.65)",
+                flexShrink: 0,
               }} />
               <span style={{
-                fontSize: "9.5px", fontWeight: 700, letterSpacing: "0.24em",
-                textTransform: "uppercase", color: "rgba(0,191,255,0.58)",
+                fontSize: "10px", fontWeight: 700, letterSpacing: "0.22em",
+                textTransform: "uppercase", color: "rgba(212,168,71,0.82)",
               }}>
                 Leonardo Frota
               </span>
             </div>
+          </div>
 
-            {/* Headline */}
-            <div className="mb-4">
-              <p style={{
-                fontSize: "clamp(0.95rem, 2.2vw, 1.2rem)",
-                fontWeight: 400, lineHeight: 1.3, letterSpacing: "-0.01em",
-                color: "rgba(255,255,255,0.26)", marginBottom: "6px",
-              }}>
-                {([
-                  { w: "Sua",    d: 80  },
-                  { w: "imagem", d: 130 },
-                  { w: "pode",   d: 168 },
-                  { w: "estar",  d: 198 },
-                ] as const).map(({ w, d }, i, arr) => (
-                  <span key={w} style={{
-                    display: "inline-block",
-                    marginRight: i < arr.length - 1 ? "0.3em" : 0,
-                    ...wordIn(d),
-                  }}>
-                    {w}
-                  </span>
-                ))}
-              </p>
-
-              <h1 style={{ margin: 0 }}>
-                <span style={{ display: "block", overflow: "hidden", lineHeight: 0.94 }}>
-                  <span className="block text-white" style={{
-                    fontSize: "clamp(3.2rem, 8.5vw, 7.4rem)",
-                    fontWeight: 900, lineHeight: 0.94, letterSpacing: "-0.04em",
-                    ...stamp(218),
-                  }}>
-                    afastando
-                  </span>
-                </span>
-
-                <span className="block" style={{
-                  fontSize: "clamp(4rem, 10.5vw, 9rem)",
-                  fontWeight: 900, lineHeight: 0.91, letterSpacing: "-0.05em",
-                  backgroundImage: "linear-gradient(110deg, #fff 0%, #c8eeff 28%, #4dc8ff 58%, #fff 100%)",
-                  backgroundSize: "200% auto",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                  animation: mounted
-                    ? `clientes-enter 1000ms ${EASE} 520ms both, gradient-shift 5s ease 1560ms infinite`
-                    : "none",
-                  opacity: mounted ? undefined : 0,
-                }}>
-                  clientes
-                </span>
-              </h1>
-
-              <p style={{
-                fontSize: "clamp(0.85rem, 1.8vw, 0.975rem)",
-                fontWeight: 400, lineHeight: 1.5, letterSpacing: "-0.005em",
-                color: "rgba(255,255,255,0.2)", marginTop: "10px",
-                ...fade(600),
-              }}>
-                — mesmo você sendo bom no que faz.
-              </p>
-            </div>
-
-            <div className="mb-7 h-px w-10" style={{ background: "rgba(0,191,255,0.18)", ...fade(700) }} />
-
-            <p className="mb-8 max-w-sm" style={{
-              fontSize: "clamp(0.875rem, 1.5vw, 0.95rem)", lineHeight: 1.85,
-              color: "rgba(255,255,255,0.32)",
-              ...fade(780),
+          {/* Headline */}
+          <div className="mb-5">
+            {/* Setup line */}
+            <p style={{
+              fontSize: "clamp(0.95rem, 2.2vw, 1.2rem)",
+              fontWeight: 400, lineHeight: 1.3, letterSpacing: "-0.01em",
+              color: "rgba(255,255,255,0.44)", marginBottom: "6px",
+              ...headlineUp(80, 600),
             }}>
-              Em{" "}
-              <strong style={{ color: "rgba(255,255,255,0.72)", fontWeight: 600 }}>4 horas</strong>
-              , você aprende a se posicionar como{" "}
-              <strong style={{ color: "rgba(90,210,255,0.78)", fontWeight: 600 }}>autoridade</strong>{" "}
-              e atrair oportunidades de alto valor — todos os dias.
+              Sua imagem pode estar
             </p>
 
-            {/* CTA */}
-            <div style={fade(880, 680)}>
+            <h1 style={{ margin: 0 }}>
+              {/* Line 1 */}
+              <span className="block text-white" style={{
+                fontSize: "clamp(3.2rem, 8.5vw, 7.4rem)",
+                fontWeight: 900, lineHeight: 0.94, letterSpacing: "-0.04em",
+                ...headlineUp(180),
+              }}>
+                afastando
+              </span>
+
+              {/* Line 2 — gradient + continuous shift */}
+              <span className="block" style={{
+                fontSize: "clamp(4rem, 10.5vw, 9rem)",
+                fontWeight: 900, lineHeight: 0.91, letterSpacing: "-0.05em",
+                backgroundImage: "linear-gradient(110deg, #fff 0%, #c8eeff 28%, #4dc8ff 58%, #fff 100%)",
+                backgroundSize: "200% auto",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+                ...headlineUp(290, 800),
+                ...(mounted && {
+                  animation: `headline-fade-up 800ms cubic-bezier(0.22,1,0.36,1) 290ms both, gradient-shift 5s ease 1200ms infinite`,
+                }),
+              }}>
+                clientes
+              </span>
+            </h1>
+
+            {/* Qualifier */}
+            <p style={{
+              fontSize: "clamp(0.85rem, 1.8vw, 0.975rem)",
+              fontWeight: 400, lineHeight: 1.5, letterSpacing: "-0.005em",
+              color: "rgba(255,255,255,0.36)", marginTop: "10px",
+              ...headlineUp(430, 600),
+            }}>
+              — mesmo você sendo bom no que faz.
+            </p>
+          </div>
+
+          {/* Editorial dual-tone separator */}
+          <div className="mb-7 flex items-center gap-1.5" style={fade(700)}>
+            <div style={{ height: "1px", width: "20px", background: "linear-gradient(to right, rgba(212,168,71,0.55), rgba(212,168,71,0.15))" }} />
+            <div style={{ height: "1px", width: "14px", background: "linear-gradient(to right, rgba(0,191,255,0.22), transparent)" }} />
+          </div>
+
+          <p className="mb-8 max-w-sm" style={{
+            fontSize: "clamp(0.875rem, 1.5vw, 0.95rem)", lineHeight: 1.85,
+            color: "rgba(255,255,255,0.52)",
+            ...fade(780),
+          }}>
+            Em{" "}
+            <strong style={{ color: "rgba(255,255,255,0.72)", fontWeight: 600 }}>4 horas</strong>
+            , você aprende a se posicionar como{" "}
+            <strong style={{ color: "rgba(90,210,255,0.78)", fontWeight: 600 }}>autoridade</strong>{" "}
+            e atrair oportunidades de alto valor — todos os dias.
+          </p>
+
+          {/* CTA */}
+          <div style={fade(880, 680)}>
+            {/* Button wrapper — carries the pulsing ring */}
+            <div className="relative inline-flex w-full sm:w-auto">
+              {/* Pulsing urgency ring */}
+              <div
+                aria-hidden="true"
+                style={{
+                  position: "absolute", inset: "-5px",
+                  borderRadius: "17px",
+                  border: "1px solid rgba(212,168,71,0.35)",
+                  animation: "cta-ping-ring 2.6s ease-out infinite",
+                  pointerEvents: "none",
+                }}
+              />
               <a
                 href="https://pay.kiwify.com.br/P5bPQp4"
                 target="_blank"
@@ -205,144 +269,288 @@ export function HeroSection() {
                 style={{
                   borderRadius: "12px",
                   padding: "16px 32px",
-                  background: "linear-gradient(135deg, #005BBF 0%, #0085D4 45%, #00A4E4 100%)",
-                  boxShadow: "0 0 0 1px rgba(0,164,228,0.22), 0 2px 4px rgba(0,0,0,0.35), 0 8px 24px -4px rgba(0,100,200,0.3), inset 0 1px 0 rgba(255,255,255,0.14)",
+                  background: "linear-gradient(135deg, #7C5C00 0%, #B8860B 45%, #D4A847 100%)",
+                  boxShadow: "0 0 0 1px rgba(212,168,71,0.28), 0 2px 4px rgba(0,0,0,0.50), 0 8px 28px -4px rgba(180,130,10,0.45), 0 20px 52px -8px rgba(140,100,0,0.25), inset 0 1px 0 rgba(255,255,255,0.18)",
                   transition: "transform 0.2s ease, box-shadow 0.2s ease",
+                  cursor: "pointer",
                 }}
                 onMouseEnter={e => {
                   const el = e.currentTarget as HTMLElement
                   el.style.transform = "translateY(-2px)"
-                  el.style.boxShadow = "0 0 0 1px rgba(0,180,240,0.36), 0 2px 4px rgba(0,0,0,0.35), 0 16px 40px -4px rgba(0,130,220,0.45), inset 0 1px 0 rgba(255,255,255,0.18)"
+                  el.style.boxShadow = "0 0 0 1px rgba(212,168,71,0.45), 0 2px 4px rgba(0,0,0,0.50), 0 16px 48px -4px rgba(200,150,20,0.60), 0 28px 64px -8px rgba(160,110,0,0.30), inset 0 1px 0 rgba(255,255,255,0.22)"
                 }}
                 onMouseLeave={e => {
                   const el = e.currentTarget as HTMLElement
                   el.style.transform = "translateY(0)"
-                  el.style.boxShadow = "0 0 0 1px rgba(0,164,228,0.22), 0 2px 4px rgba(0,0,0,0.35), 0 8px 24px -4px rgba(0,100,200,0.3), inset 0 1px 0 rgba(255,255,255,0.14)"
+                  el.style.boxShadow = "0 0 0 1px rgba(212,168,71,0.22), 0 2px 4px rgba(0,0,0,0.50), 0 8px 24px -4px rgba(160,110,0,0.35), inset 0 1px 0 rgba(255,255,255,0.14)"
                 }}
               >
                 <div
                   className="-translate-x-full group-hover:translate-x-full absolute inset-0"
-                  style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)", transition: "transform 0.5s ease" }}
+                  style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.13), transparent)", transition: "transform 0.5s ease" }}
                 />
-                <span style={{ fontSize: "15px", fontWeight: 700, letterSpacing: "0.01em", color: "#fff", position: "relative" }}>
+                <span style={{ fontSize: "15px", fontWeight: 700, letterSpacing: "0.01em", color: "#1A1000", position: "relative" }}>
                   Garantir minha vaga agora
                 </span>
                 <ArrowRight
-                  className="relative shrink-0 text-white/75 group-hover:translate-x-1"
+                  className="relative shrink-0 group-hover:translate-x-1"
                   size={16}
-                  style={{ transition: "transform 0.2s ease" }}
+                  style={{ color: "rgba(26,16,0,0.70)", transition: "transform 0.2s ease" }}
                 />
               </a>
+            </div>
 
-              <div className="mt-4 flex flex-wrap items-center gap-3">
-                <div className="flex items-center gap-1.5">
-                  <div className="h-1.5 w-1.5 shrink-0 rounded-full" style={{
-                    background: "#FF5757",
-                    boxShadow: "0 0 5px rgba(255,80,80,0.6)",
-                    animation: "glow-pulse 2.5s ease-in-out infinite",
-                  }} />
-                  <span style={{ fontSize: "11px", color: "rgba(255,255,255,0.24)", letterSpacing: "0.04em" }}>
-                    Vagas limitadas
-                  </span>
-                </div>
-                <div className="h-2.5 w-px shrink-0" style={{ background: "rgba(255,255,255,0.08)" }} />
-                <span style={{ fontSize: "11px", color: "rgba(255,255,255,0.17)", letterSpacing: "0.03em" }}>
-                  Apenas R$197 · Parcelado em 12x
+            <div className="mt-4 flex flex-wrap items-center gap-3">
+              <div className="flex items-center gap-1.5">
+                <div className="h-1.5 w-1.5 shrink-0 rounded-full" style={{
+                  background: "#FF5757",
+                  boxShadow: "0 0 5px rgba(255,80,80,0.6)",
+                  animation: "glow-pulse 2.5s ease-in-out infinite",
+                }} />
+                <span style={{ fontSize: "11px", color: "rgba(255,255,255,0.40)", letterSpacing: "0.04em" }}>
+                  Vagas limitadas
+                </span>
+              </div>
+              <div className="h-2.5 w-px shrink-0" style={{ background: "rgba(255,255,255,0.10)" }} />
+              {/* Confident price — no discount framing */}
+              <div style={{ display: "flex", alignItems: "baseline", gap: "5px" }}>
+                <span style={{ fontSize: "14px", fontWeight: 700, color: "rgba(255,255,255,0.65)", letterSpacing: "-0.02em" }}>
+                  R$197
+                </span>
+                <span style={{ fontSize: "10px", color: "rgba(255,255,255,0.26)", letterSpacing: "0.03em" }}>
+                  ou 12× de R$18,78
                 </span>
               </div>
             </div>
-
           </div>
 
+        </div>
 
-          {/* ── CARD COLUMN ── right on desktop, top on mobile */}
-          <div className="shrink-0 w-full lg:w-[360px] xl:w-[420px] lg:order-last">
 
-            {/* Outer: entrance animation — isolated from the scroll transform below */}
-            <div style={cardEntrance}>
+        {/* ── CARD COLUMN ── */}
+        <div
+          className="order-1 lg:order-2 relative flex justify-center lg:justify-end"
+          style={cardEntrance}
+        >
+          {/* Pool de sombra abaixo do card — ancora visualmente, elimina sensação de flutuação */}
+          <div
+            aria-hidden="true"
+            className="absolute pointer-events-none"
+            style={{
+              bottom: "-28px",
+              left: "5%", right: "5%",
+              height: "56px",
+              background: "radial-gradient(ellipse 80% 100% at 50% 100%, rgba(0,0,0,0.55) 0%, transparent 70%)",
+              filter: "blur(14px)",
+              zIndex: 0,
+            }}
+          />
 
-              {/* Inner: scroll-driven translateY — no rotation, no perspective */}
-              <div ref={cardRef} style={{ willChange: "transform" }}>
-
-                {/* ─── THE CARD ─── */}
+          {/* Card wrapper — aspect 3:4, proporcão mais cinematográfica */}
+          <div
+            className="relative w-full aspect-[3/4] max-w-[260px] mx-auto lg:max-w-full lg:mx-0"
+            style={{
+              zIndex: 1,
+              animation: mounted ? "hero-card-float 6s ease-in-out infinite" : undefined,
+              willChange: "transform",
+            }}
+          >
+            {/* Metallic/glass border shell */}
+            <div
+              className="absolute inset-0"
+              style={{
+                borderRadius: "18px",
+                padding: "1px",
+                background: [
+                  "linear-gradient(145deg,",
+                  "rgba(255,255,255,0.28) 0%,",      /* top-left: bright specular hit */
+                  "rgba(200,220,255,0.10) 18%,",     /* cool silver */
+                  "rgba(255,255,255,0.03) 42%,",     /* near-transparent mid */
+                  "rgba(100,160,255,0.06) 68%,",     /* faint blue shimmer */
+                  "rgba(0,100,220,0.18) 100%",       /* bottom-right: blue edge light */
+                  ")",
+                ].join(" "),
+                boxShadow: [
+                  /* outer glow ring — glass rim */
+                  "0 0 0 1px rgba(255,255,255,0.04)",
+                  /* close sharp shadow */
+                  "0 2px 4px rgba(0,0,0,0.85)",
+                  /* mid-range */
+                  "0 8px 24px rgba(0,0,0,0.65)",
+                  /* wide ambient */
+                  "0 28px 60px rgba(0,0,0,0.42)",
+                  /* deep cinematic halo */
+                  "0 60px 110px rgba(0,0,0,0.22)",
+                  /* subtle blue inner glow */
+                  "inset 0 1px 0 rgba(180,210,255,0.09)",
+                ].join(", "),
+              }}
+            >
+              {/* Card inner */}
+              <div
+                className="relative overflow-hidden w-full h-full"
+                style={{
+                  borderRadius: "17px",
+                  background: "linear-gradient(185deg, #061428 0%, #040d1e 35%, #020a18 65%, #010508 100%)",
+                }}
+              >
+                {/* Primary studio spotlight — key light behind speaker, top-center */}
                 <div
-                  className="relative overflow-hidden h-[260px] lg:h-auto lg:aspect-[3/4]"
+                  aria-hidden="true"
+                  className="absolute inset-0 pointer-events-none"
                   style={{
-                    borderRadius: "20px",
-                    border: "1px solid rgba(255,255,255,0.07)",
-                    // Multi-layer shadow: close contact → mid-range → ambient
-                    // No color glow — pure neutral depth
-                    boxShadow: [
-                      "0 1px 2px rgba(0,0,0,0.35)",
-                      "0 4px 8px rgba(0,0,0,0.28)",
-                      "0 12px 28px rgba(0,0,0,0.22)",
-                      "0 32px 56px rgba(0,0,0,0.18)",
-                    ].join(", "),
-                    background: "linear-gradient(175deg, #06101e 0%, #040b18 50%, #030810 100%)",
+                    background: "radial-gradient(ellipse 72% 85% at 50% 58%, rgba(0,90,220,0.44) 0%, rgba(0,55,160,0.24) 28%, rgba(0,30,100,0.10) 55%, transparent 78%)",
+                    zIndex: 0,
+                  }}
+                />
+                {/* Rim kicker — cool side light from top-left, simulates studio fill */}
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-0 pointer-events-none"
+                  style={{
+                    background: "radial-gradient(ellipse 55% 40% at 18% 10%, rgba(110,170,255,0.14) 0%, rgba(60,120,220,0.06) 45%, transparent 72%)",
+                    zIndex: 0,
+                  }}
+                />
+                {/* Warm ground — subtle amber at very bottom to anchor feet */}
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-0 pointer-events-none"
+                  style={{
+                    background: "radial-gradient(ellipse 80% 30% at 50% 100%, rgba(0,40,100,0.18) 0%, transparent 70%)",
+                    zIndex: 0,
+                  }}
+                />
+
+                {/* Foto com mask-image — corte invisível, dissolução natural na cintura */}
+                <img
+                  src="/images/leonardo.png"
+                  alt="Leonardo Frota"
+                  className="absolute inset-0 w-full h-full"
+                  style={{
+                    objectFit: "cover",
+                    objectPosition: "top center",
+                    zIndex: 1,
+                    maskImage: [
+                      "linear-gradient(to top,",
+                      "transparent 0%,",
+                      "transparent 8%,",
+                      "rgba(0,0,0,0.12) 14%,",
+                      "rgba(0,0,0,0.40) 22%,",
+                      "rgba(0,0,0,0.72) 30%,",
+                      "rgba(0,0,0,0.92) 38%,",
+                      "black 48%",
+                      ")",
+                    ].join(" "),
+                    WebkitMaskImage: [
+                      "linear-gradient(to top,",
+                      "transparent 0%,",
+                      "transparent 8%,",
+                      "rgba(0,0,0,0.12) 14%,",
+                      "rgba(0,0,0,0.40) 22%,",
+                      "rgba(0,0,0,0.72) 30%,",
+                      "rgba(0,0,0,0.92) 38%,",
+                      "black 48%",
+                      ")",
+                    ].join(" "),
+                  }}
+                />
+
+                {/* Vignette lateral — profundidade cinematográfica */}
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-0 pointer-events-none"
+                  style={{
+                    background: "radial-gradient(ellipse 70% 90% at 50% 40%, transparent 45%, rgba(0,0,0,0.38) 100%)",
+                    zIndex: 2,
+                  }}
+                />
+
+                {/* Inner glass edge — hairline highlight traces the card top */}
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-x-0 top-0 pointer-events-none"
+                  style={{
+                    height: "1px",
+                    background: "linear-gradient(to right, transparent 0%, rgba(255,255,255,0.18) 30%, rgba(255,255,255,0.22) 55%, rgba(200,220,255,0.08) 80%, transparent 100%)",
+                    zIndex: 3,
+                  }}
+                />
+
+                {/* Authority badge — floats top-right, gold credential anchor */}
+                <div
+                  style={{
+                    position: "absolute", top: "14px", right: "14px", zIndex: 4,
+                    display: "inline-flex", alignItems: "center", gap: "5px",
+                    padding: "4px 10px",
+                    background: "linear-gradient(135deg, rgba(212,168,71,0.14) 0%, rgba(180,130,10,0.06) 100%)",
+                    border: "1px solid rgba(212,168,71,0.30)",
+                    borderRadius: "100px",
+                    backdropFilter: "blur(8px)",
                   }}
                 >
+                  <div style={{ width: 4, height: 4, borderRadius: "50%", background: "#D4A847", boxShadow: "0 0 5px rgba(212,168,71,0.8)", flexShrink: 0 }} />
+                  <span style={{
+                    fontSize: "8.5px", fontWeight: 700, letterSpacing: "0.20em",
+                    textTransform: "uppercase", color: "rgba(212,168,71,0.88)",
+                  }}>
+                    Edição 2026
+                  </span>
+                </div>
 
-                  {/* Subject photo — top-aligned, centered, never crops the head */}
-                  <img
-                    src="/images/leonardo.png"
-                    alt="Leonardo Frota"
-                    className="absolute top-0 left-1/2 -translate-x-1/2 h-full w-auto max-w-none"
-                    style={{ filter: "brightness(0.95) contrast(1.02)" }}
-                  />
+                {/* Reflexo de luz no topo — especular sutil */}
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-x-0 top-0 pointer-events-none"
+                  style={{
+                    height: "35%",
+                    background: "linear-gradient(to bottom, rgba(80,140,255,0.07) 0%, transparent 100%)",
+                    zIndex: 2,
+                  }}
+                />
 
-                  {/* Subtle top vignette */}
-                  <div className="absolute inset-x-0 top-0 pointer-events-none" style={{
-                    height: "12%",
-                    background: "linear-gradient(to bottom, rgba(6,16,30,0.6) 0%, transparent 100%)",
-                  }} />
-
-                  {/* Bottom fade — blends subject into card floor */}
-                  <div className="absolute inset-x-0 bottom-0 pointer-events-none" style={{
-                    height: "38%",
-                    background: "linear-gradient(to top, rgba(3,8,16,1) 0%, rgba(3,8,16,0.82) 30%, rgba(3,8,16,0.45) 60%, transparent 100%)",
-                  }} />
-
-                  {/* Event info strip */}
-                  <div
-                    className="absolute bottom-0 inset-x-0 px-5 py-4 pointer-events-none"
-                    style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }}
-                  >
-                    <div className="flex items-center gap-4 flex-wrap">
-                      <div className="flex items-center gap-1.5">
-                        <MapPin size={10} style={{ color: "rgba(0,191,255,0.38)" }} />
-                        <span style={{ fontSize: "10px", fontWeight: 500, letterSpacing: "0.06em", color: "rgba(255,255,255,0.3)" }}>
-                          SEST SENAT
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        <Calendar size={10} style={{ color: "rgba(0,191,255,0.38)" }} />
-                        <span style={{ fontSize: "10px", fontWeight: 500, letterSpacing: "0.06em", color: "rgba(255,255,255,0.3)" }}>
-                          23 Abr
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        <Clock size={10} style={{ color: "rgba(0,191,255,0.38)" }} />
-                        <span style={{ fontSize: "10px", fontWeight: 500, letterSpacing: "0.06em", color: "rgba(255,255,255,0.3)" }}>
-                          18h – 22h
-                        </span>
-                      </div>
+                {/* Event strip — posicionado acima da zona transparente da máscara */}
+                <div
+                  className="absolute bottom-0 inset-x-0 px-4 py-3 pointer-events-none"
+                  style={{
+                    zIndex: 3,
+                    background: "linear-gradient(to top, rgba(3,8,18,0.82) 0%, transparent 100%)",
+                  }}
+                >
+                  <div className="flex items-center gap-4 flex-wrap">
+                    <div className="flex items-center gap-1.5">
+                      <MapPin size={9} style={{ color: "rgba(0,191,255,0.78)", flexShrink: 0 }} />
+                      <span style={{ fontSize: "9.5px", fontWeight: 500, letterSpacing: "0.07em", color: "rgba(255,255,255,0.62)" }}>
+                        SEST SENAT
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <Calendar size={9} style={{ color: "rgba(0,191,255,0.78)", flexShrink: 0 }} />
+                      <span style={{ fontSize: "9.5px", fontWeight: 500, letterSpacing: "0.07em", color: "rgba(255,255,255,0.62)" }}>
+                        14 Mai
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <Clock size={9} style={{ color: "rgba(0,191,255,0.78)", flexShrink: 0 }} />
+                      <span style={{ fontSize: "9.5px", fontWeight: 500, letterSpacing: "0.07em", color: "rgba(255,255,255,0.62)" }}>
+                        18h – 22h
+                      </span>
                     </div>
                   </div>
+                </div>
 
-                </div>{/* end card */}
+              </div>
+            </div>
+          </div>
 
-              </div>{/* end cardRef */}
-            </div>{/* end cardEntrance */}
+        </div>{/* end card column */}
 
-          </div>{/* end card column */}
-
-        </div>
       </div>
 
 
-      {/* ════════════════════════════════════════════════════
+      {/* ══════════════════════════════════════════
           ROW 3 — BOTTOM STRIP
-      ════════════════════════════════════════════════════ */}
+      ══════════════════════════════════════════ */}
       <div
         className="relative z-20 border-t px-6 sm:px-8 lg:px-12 xl:px-16"
         style={{ borderColor: "rgba(255,255,255,0.05)", ...fade(1060, 600) }}
@@ -350,6 +558,22 @@ export function HeroSection() {
         <div className="flex flex-wrap items-center justify-between gap-y-3 py-4">
 
           <div className="flex items-center gap-3">
+            {/* Star rating */}
+            <div className="flex items-center gap-1.5 shrink-0">
+              <div style={{ display: "flex", gap: "1.5px" }}>
+                {[1,2,3,4,5].map(i => (
+                  <svg key={i} width="11" height="11" viewBox="0 0 24 24" aria-hidden="true">
+                    <polygon
+                      points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"
+                      fill="#D4A847"
+                      opacity="0.82"
+                    />
+                  </svg>
+                ))}
+              </div>
+              <span style={{ fontSize: "11px", fontWeight: 600, color: "rgba(212,168,71,0.70)", letterSpacing: "0.02em" }}>4.9</span>
+            </div>
+            <div className="h-3 w-px shrink-0" style={{ background: "rgba(255,255,255,0.08)" }} />
             <div className="flex -space-x-2">
               {[1, 2, 3, 4].map(i => (
                 <img
@@ -361,9 +585,9 @@ export function HeroSection() {
                 />
               ))}
             </div>
-            <p style={{ fontSize: "11.5px", color: "rgba(255,255,255,0.2)", lineHeight: 1.4 }}>
+            <p style={{ fontSize: "11.5px", color: "rgba(255,255,255,0.36)", lineHeight: 1.4 }}>
               +500 profissionais{" "}
-              <span style={{ color: "rgba(255,255,255,0.38)", fontWeight: 500 }}>
+              <span style={{ color: "rgba(255,255,255,0.58)", fontWeight: 500 }}>
                 transformaram sua imagem
               </span>
             </p>
@@ -373,7 +597,7 @@ export function HeroSection() {
             className="hidden sm:flex items-center gap-4"
             style={{
               fontSize: "9.5px", fontWeight: 600, letterSpacing: "0.18em",
-              textTransform: "uppercase", color: "rgba(255,255,255,0.12)",
+              textTransform: "uppercase", color: "rgba(255,255,255,0.24)",
             }}
           >
             <span>Pagamento seguro</span>
@@ -386,7 +610,7 @@ export function HeroSection() {
         </div>
       </div>
 
-      {/* Section-to-section blend */}
+      {/* Section blend */}
       <div
         className="absolute bottom-0 inset-x-0 h-20 pointer-events-none z-30"
         style={{ background: `linear-gradient(to top, ${BG} 0%, transparent 100%)` }}

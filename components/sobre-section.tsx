@@ -6,56 +6,87 @@ export function SobreSection() {
   const { ref: contentRef, isVisible: contentVisible } = useScrollAnimation()
 
   return (
-    <section className="relative bg-[#0d1117] py-32 px-6 md:py-44 overflow-hidden">
-      <div className="absolute top-0 inset-x-0 h-40 bg-gradient-to-b from-[#0a0a0f] to-transparent pointer-events-none" />
+    <section className="relative bg-[#0d1117] py-28 md:py-40 overflow-hidden">
+      {/* Section separator */}
+      <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/[0.07] to-transparent pointer-events-none" />
+      <div className="absolute top-0 inset-x-0 h-52 bg-gradient-to-b from-[#0a0a0f] to-transparent pointer-events-none" />
+      {/* Bottom blend into conteudo */}
+      <div className="absolute bottom-0 inset-x-0 h-40 bg-gradient-to-t from-[#0a0a0f] to-transparent pointer-events-none" />
+      {/* Ambient glow — pushed toward lower-center to bleed toward section exit */}
       <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] rounded-full blur-[160px]"
-        style={{ background: "radial-gradient(ellipse, rgba(14,165,233,0.05) 0%, rgba(99,102,241,0.04) 50%, transparent 70%)" }}
+        className="absolute bottom-1/4 left-1/3 w-[700px] h-[350px] rounded-full blur-[140px] pointer-events-none"
+        style={{ background: "radial-gradient(ellipse, rgba(14,165,233,0.06) 0%, rgba(99,102,241,0.04) 50%, transparent 70%)" }}
       />
 
       <div
         ref={contentRef}
-        className={`relative mx-auto max-w-4xl scroll-fade-in ${contentVisible ? "visible" : ""}`}
+        className={`relative px-6 sm:px-8 lg:px-12 xl:px-20 scroll-stagger ${contentVisible ? "visible" : ""}`}
       >
-        <p className="mb-10 text-[0.65rem] font-bold uppercase tracking-[0.22em] text-cyan-400/60">
-          O Evento
-        </p>
+        {/* Gold pill */}
+        <div className="scroll-item stagger-1 from-left mb-12">
+          <div style={{
+            display: "inline-flex", alignItems: "center", gap: "8px",
+            padding: "5px 14px 5px 10px",
+            border: "1px solid rgba(212,168,71,0.22)",
+            borderRadius: "100px",
+            background: "linear-gradient(135deg, rgba(212,168,71,0.06) 0%, transparent 100%)",
+          }}>
+            <div style={{ width: 5, height: 5, borderRadius: "50%", background: "#D4A847", boxShadow: "0 0 6px rgba(212,168,71,0.60)", flexShrink: 0 }} />
+            <span style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(212,168,71,0.78)" }}>
+              O Evento
+            </span>
+          </div>
+        </div>
 
-        {/* Strikethroughs — bold, editorial */}
-        <div className="mb-14 space-y-3">
-          <p className="text-3xl font-black text-white/[0.15] line-through decoration-rose-400/20 decoration-[3px] md:text-5xl lg:text-6xl tracking-tight leading-tight">
+        {/* Strikethrough statements — committed, dramatic.
+            Size doubled from original. Decoration opacity raised 2×.
+            These should feel like crossed-out accusations, not whispered disclaimers. */}
+        <div className="scroll-item stagger-2 mb-14 space-y-2">
+          <p
+            className="font-black text-white/28 line-through tracking-tight leading-tight"
+            style={{
+              fontSize: "clamp(2.8rem, 7vw, 6.5rem)",
+              textDecorationColor: "rgba(244,63,94,0.55)",
+              textDecorationThickness: "4px",
+            }}
+          >
             Palestra motivacional.
           </p>
-          <p className="text-3xl font-black text-white/[0.15] line-through decoration-rose-400/20 decoration-[3px] md:text-5xl lg:text-6xl tracking-tight leading-tight">
+          <p
+            className="font-black text-white/28 line-through tracking-tight leading-tight"
+            style={{
+              fontSize: "clamp(2.8rem, 7vw, 6.5rem)",
+              textDecorationColor: "rgba(244,63,94,0.55)",
+              textDecorationThickness: "4px",
+            }}
+          >
             Sobre postar mais.
           </p>
         </div>
 
-        {/* Divider */}
-        <div className="mb-14 flex items-center gap-4">
-          <div className="h-px w-16 bg-gradient-to-r from-transparent to-cyan-500/40" />
-          <div className="h-1.5 w-1.5 rounded-full bg-cyan-400/60" />
-          <div className="h-px w-16 bg-gradient-to-l from-transparent to-cyan-500/40" />
-        </div>
+        {/* Clean ruled divider — replaces the generic ← · → placeholder */}
+        <div
+          className="scroll-item stagger-3 mb-14"
+          style={{ height: "1px", maxWidth: "200px", background: "linear-gradient(to right, rgba(255,255,255,0.14), transparent)" }}
+        />
 
-        {/* Main statement */}
-        <p className="text-3xl font-black leading-[1.1] text-white tracking-tight md:text-5xl lg:text-6xl xl:text-7xl">
+        {/* Main statement — full weight, no apologetic blur boxes */}
+        <p
+          className="scroll-item stagger-4 font-black leading-[1.04] text-white tracking-tight"
+          style={{ fontSize: "clamp(2.4rem, 6vw, 5.8rem)" }}
+        >
           Construir uma imagem que{" "}
-          <span className="relative inline-block">
-            <span
-              className="relative z-10"
-              style={{
-                background: "linear-gradient(135deg, #67e8f9 0%, #38bdf8 55%, #818cf8 100%)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-              }}
-            >
-              gera oportunidade
-            </span>
-            <span className="absolute -inset-2 bg-cyan-400/8 blur-2xl rounded-lg" />
+          <span
+            style={{
+              background: "linear-gradient(135deg, #D4A847 0%, #F5D47A 55%, #B8860B 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+            }}
+          >
+            gera oportunidade
           </span>{" "}
-          <span className="text-white/35">antes de você vender.</span>
+          <span style={{ color: "rgba(255,255,255,0.48)" }}>antes de você vender.</span>
         </p>
       </div>
     </section>

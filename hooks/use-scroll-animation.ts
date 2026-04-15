@@ -11,7 +11,10 @@ interface UseScrollAnimationOptions {
 export function useScrollAnimation<T extends HTMLElement = HTMLDivElement>(
   options: UseScrollAnimationOptions = {}
 ) {
-  const { threshold = 0.1, rootMargin = "0px", triggerOnce = true } = options
+  // rootMargin "0px 0px -48px 0px" — inset trigger zone 48px from viewport bottom.
+  // Elements start animating as they enter view, not after they're already visible.
+  // Reduced from -72px: this single change makes scroll feel most fluid and continuous.
+  const { threshold = 0.1, rootMargin = "0px 0px -48px 0px", triggerOnce = true } = options
   const ref = useRef<T>(null)
   const [isVisible, setIsVisible] = useState(false)
 

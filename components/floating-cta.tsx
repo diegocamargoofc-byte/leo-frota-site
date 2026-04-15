@@ -1,88 +1,83 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
-import { Button } from "@/components/ui/button"
+import { useState, useEffect } from "react"
+import { ArrowRight } from "lucide-react"
 
 export function FloatingCta() {
   const [isVisible, setIsVisible] = useState(false)
-  const [isHovered, setIsHovered] = useState(false)
-  const [isCtaSectionVisible, setIsCtaSectionVisible] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
-      // Show after scrolling past the hero section (approx 500px)
       const pastHero = window.scrollY > 500
-      
-      // Check if oferta-section or cta-final-section is in viewport
+
       const ofertaSection = document.querySelector('[data-section="oferta"]')
       const ctaFinalSection = document.querySelector('[data-section="cta-final"]')
-      
+
       let ctaInView = false
-      
+
       if (ofertaSection) {
         const rect = ofertaSection.getBoundingClientRect()
-        // Consider section visible when it's more than 30% in the viewport
-        if (rect.top < window.innerHeight * 0.7 && rect.bottom > 0) {
-          ctaInView = true
-        }
+        if (rect.top < window.innerHeight * 0.7 && rect.bottom > 0) ctaInView = true
       }
-      
+
       if (ctaFinalSection) {
         const rect = ctaFinalSection.getBoundingClientRect()
-        if (rect.top < window.innerHeight * 0.7 && rect.bottom > 0) {
-          ctaInView = true
-        }
+        if (rect.top < window.innerHeight * 0.7 && rect.bottom > 0) ctaInView = true
       }
-      
-      setIsCtaSectionVisible(ctaInView)
+
       setIsVisible(pastHero && !ctaInView)
     }
 
     window.addEventListener("scroll", handleScroll, { passive: true })
-    handleScroll() // Initial check
+    handleScroll()
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
   return (
     <div
-      className={`fixed z-50 transition-all duration-500 ${
-        isVisible
-          ? "opacity-100 translate-y-0"
-          : "opacity-0 translate-y-4 pointer-events-none"
-      } bottom-6 right-6 md:bottom-8 md:right-8 left-6 md:left-auto`}
+      className={`fixed z-50 transition-all duration-500 bottom-6 right-6 md:bottom-8 md:right-8 left-6 md:left-auto ${
+        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"
+      }`}
     >
-      <Button
-        asChild
-        size="lg"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-        className={`w-full md:w-auto relative overflow-hidden bg-gradient-to-r from-cyan-500 via-blue-500 to-cyan-500 bg-[length:200%_auto] px-8 py-6 text-base md:text-lg font-bold text-white transition-all duration-300 ${
-          isHovered ? "scale-105 shadow-2xl shadow-cyan-500/50" : "shadow-xl shadow-cyan-500/30"
-        }`}
+      <a
+        href="https://pay.kiwify.com.br/P5bPQp4"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="group relative w-full md:w-auto inline-flex items-center justify-center gap-2.5 overflow-hidden"
         style={{
-          animation: "gradient-shift 3s ease infinite",
+          borderRadius: "14px",
+          padding: "15px 28px",
+          background: "linear-gradient(135deg, #7C5C00 0%, #B8860B 45%, #D4A847 100%)",
+          boxShadow: "0 0 0 1px rgba(212,168,71,0.30), 0 4px 8px rgba(0,0,0,0.60), 0 12px 36px -4px rgba(180,130,10,0.50), inset 0 1px 0 rgba(255,255,255,0.18)",
+          transition: "transform 0.2s ease, box-shadow 0.2s ease",
+          cursor: "pointer",
+          display: "flex",
+        }}
+        onMouseEnter={e => {
+          const el = e.currentTarget as HTMLElement
+          el.style.transform = "translateY(-2px)"
+          el.style.boxShadow = "0 0 0 1px rgba(212,168,71,0.50), 0 4px 8px rgba(0,0,0,0.60), 0 20px 52px -4px rgba(200,150,20,0.65), inset 0 1px 0 rgba(255,255,255,0.22)"
+        }}
+        onMouseLeave={e => {
+          const el = e.currentTarget as HTMLElement
+          el.style.transform = "translateY(0)"
+          el.style.boxShadow = "0 0 0 1px rgba(212,168,71,0.30), 0 4px 8px rgba(0,0,0,0.60), 0 12px 36px -4px rgba(180,130,10,0.50), inset 0 1px 0 rgba(255,255,255,0.18)"
         }}
       >
-        <a href="https://pay.kiwify.com.br/P5bPQp4" target="_blank" rel="noopener noreferrer">
-          <span className="relative z-10 flex items-center justify-center gap-2">
-            Garantir minha vaga
-            <svg
-              className={`h-5 w-5 transition-transform duration-300 ${isHovered ? "translate-x-1" : ""}`}
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-            </svg>
-          </span>
-          {/* Shimmer effect */}
-          <div
-            className={`absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-500 ${
-              isHovered ? "translate-x-full" : "-translate-x-full"
-            }`}
-          />
-        </a>
-      </Button>
+        {/* Shimmer */}
+        <div
+          className="-translate-x-full group-hover:translate-x-full absolute inset-0"
+          style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.14), transparent)", transition: "transform 0.5s ease" }}
+        />
+        <span style={{ fontSize: "15px", fontWeight: 700, color: "#1A1000", position: "relative", whiteSpace: "nowrap" }}>
+          Garantir minha vaga
+        </span>
+        <ArrowRight
+          size={16}
+          className="group-hover:translate-x-0.5 transition-transform duration-200"
+          style={{ color: "rgba(26,16,0,0.70)", position: "relative", flexShrink: 0 }}
+        />
+      </a>
     </div>
   )
 }

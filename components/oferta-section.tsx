@@ -1,7 +1,6 @@
 "use client"
 
-import { ArrowRight, AlertTriangle, Shield, Users } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { ArrowRight } from "lucide-react"
 import { useScrollAnimation } from "@/hooks/use-scroll-animation"
 
 export function OfertaSection() {
@@ -10,91 +9,157 @@ export function OfertaSection() {
   return (
     <section
       data-section="oferta"
-      className="relative py-32 px-6 md:py-44 overflow-hidden"
+      className="relative py-28 px-6 md:py-44 overflow-hidden"
       style={{ background: "linear-gradient(180deg, #12101f 0%, #0a0a10 50%, #08080c 100%)" }}
     >
-      <div className="absolute top-0 inset-x-0 h-40 bg-gradient-to-b from-[#12101f] to-transparent pointer-events-none" />
+      {/* Section separator */}
+      <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/[0.07] to-transparent pointer-events-none" />
+      <div className="absolute top-0 inset-x-0 h-52 bg-gradient-to-b from-[#12101f] to-transparent pointer-events-none" />
+      {/* Primary gold ambient — the conversion section deserves the richest lighting */}
       <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] rounded-full blur-[160px]"
-        style={{ background: "radial-gradient(ellipse, rgba(34,211,238,0.06) 0%, rgba(99,102,241,0.04) 50%, transparent 70%)" }}
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[600px] rounded-full blur-[140px] pointer-events-none"
+        style={{ background: "radial-gradient(ellipse, rgba(212,168,71,0.13) 0%, rgba(99,102,241,0.06) 55%, transparent 75%)" }}
+      />
+      {/* Secondary ambient — fills the upper half with warm depth */}
+      <div
+        className="absolute top-0 right-0 w-[500px] h-[400px] rounded-full blur-[160px] pointer-events-none"
+        style={{ background: "radial-gradient(ellipse, rgba(212,168,71,0.06) 0%, transparent 65%)" }}
       />
 
       <div
         ref={contentRef}
-        className={`relative mx-auto max-w-xl scroll-fade-in ${contentVisible ? "visible" : ""}`}
+        className={`relative mx-auto max-w-xl scroll-stagger ${contentVisible ? "visible" : ""}`}
       >
-        <p className="mb-8 text-center text-[0.65rem] font-bold uppercase tracking-[0.22em] text-amber-400/60">
-          Oferta
-        </p>
+        {/* Gold pill eyebrow — replaces amber text */}
+        <div className="scroll-item stagger-1 from-left mb-8 flex justify-center">
+          <div style={{
+            display: "inline-flex", alignItems: "center", gap: "8px",
+            padding: "5px 14px 5px 10px",
+            border: "1px solid rgba(212,168,71,0.22)",
+            borderRadius: "100px",
+            background: "linear-gradient(135deg, rgba(212,168,71,0.06) 0%, transparent 100%)",
+          }}>
+            <div style={{ width: 5, height: 5, borderRadius: "50%", background: "#D4A847", boxShadow: "0 0 6px rgba(212,168,71,0.60)", flexShrink: 0 }} />
+            <span style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(212,168,71,0.78)" }}>
+              Oferta
+            </span>
+          </div>
+        </div>
 
-        {/* Urgency pill */}
-        <div className="mb-10 flex justify-center">
-          <div className="inline-flex items-center gap-2 rounded-full border border-red-500/20 bg-red-500/[0.07] px-5 py-2.5 text-sm font-semibold text-red-400/80">
-            <AlertTriangle className="h-3.5 w-3.5" />
-            Vagas limitadas — 1º Lote
+        {/* Scarcity signal — gold pill with pulsing dot.
+            Replaces the AlertTriangle red pill (Hotmart/Kiwify template pattern). */}
+        <div className="scroll-item stagger-2 mb-10 flex justify-center">
+          <div style={{
+            display: "inline-flex", alignItems: "center", gap: "8px",
+            padding: "7px 16px 7px 12px",
+            border: "1px solid rgba(212,168,71,0.22)",
+            borderRadius: "100px",
+            background: "linear-gradient(135deg, rgba(212,168,71,0.07) 0%, transparent 100%)",
+          }}>
+            <div style={{
+              width: 6, height: 6, borderRadius: "50%",
+              background: "#D4A847",
+              boxShadow: "0 0 6px rgba(212,168,71,0.70)",
+              flexShrink: 0,
+              animation: "glow-pulse 2.5s ease-in-out infinite",
+            }} />
+            <span style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(212,168,71,0.80)" }}>
+              Vagas limitadas — 1º Lote
+            </span>
           </div>
         </div>
 
         {/* Premium card */}
         <div
-          className="relative overflow-hidden rounded-[2.5rem] border border-white/[0.07]"
+          className="scroll-item stagger-3 scale-in relative overflow-hidden rounded-[2.5rem]"
           style={{
-            background: "linear-gradient(160deg, rgba(255,255,255,0.055) 0%, rgba(99,102,241,0.035) 60%, rgba(255,255,255,0.015) 100%)",
+            background: "linear-gradient(160deg, rgba(255,255,255,0.06) 0%, rgba(212,168,71,0.03) 40%, rgba(20,30,60,0.06) 100%)",
+            border: "1px solid rgba(255,255,255,0.10)",
+            boxShadow: [
+              "0 0 0 1px rgba(212,168,71,0.06)",
+              "0 4px 8px rgba(0,0,0,0.80)",
+              "0 16px 40px rgba(0,0,0,0.55)",
+              "0 40px 80px rgba(0,0,0,0.35)",
+              "inset 0 1px 0 rgba(212,168,71,0.08)",
+            ].join(", "),
           }}
         >
-          {/* Top highlight line */}
-          <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent" />
+          {/* Top highlight — gold-tinted */}
+          <div className="absolute top-0 inset-x-0 h-px"
+            style={{ background: "linear-gradient(to right, transparent, rgba(212,168,71,0.30), rgba(255,255,255,0.15), rgba(212,168,71,0.20), transparent)" }} />
 
           <div className="p-10 md:p-16">
 
-            {/* Lot + original price */}
-            <div className="mb-6 flex items-center gap-3">
-              <span className="text-xs font-semibold uppercase tracking-widest text-white/25 border border-white/10 rounded-full px-3 py-1">
+            {/* Lot badge — no strikethrough price.
+                Premium brands don't signal value through discounts. */}
+            <div className="mb-8">
+              <span style={{
+                fontSize: "10px", fontWeight: 700, letterSpacing: "0.22em", textTransform: "uppercase",
+                color: "rgba(212,168,71,0.70)",
+                border: "1px solid rgba(212,168,71,0.22)", borderRadius: "100px",
+                padding: "4px 12px",
+              }}>
                 1º Lote
               </span>
-              <span className="text-sm text-white/25 line-through">R$317</span>
             </div>
 
-            {/* Price — massive */}
+            {/* Price — large, confident, standing alone */}
             <div className="mb-3 flex items-start gap-1 leading-none">
-              <span className="mt-5 text-2xl font-black text-white/30">R$</span>
-              <span className="text-[7rem] font-black leading-[0.9] tracking-[-0.04em] text-white md:text-[9rem]">
+              <span className="mt-5 text-2xl font-black text-white/45">R$</span>
+              <span className="font-black leading-[0.9] tracking-[-0.04em] text-white" style={{ fontSize: "clamp(6rem, 18vw, 9rem)" }}>
                 197
               </span>
             </div>
-            <p className="mb-12 text-base text-cyan-400/75">
-              ou <span className="font-semibold text-cyan-300">12× de R$20,37</span>
+            <p className="mb-12 text-base text-white/50">
+              ou <span className="font-semibold text-white/70">12× de R$20,37</span>
             </p>
 
-            {/* CTA */}
-            <Button
-              asChild
-              size="lg"
-              className="w-full h-16 rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-cyan-500 bg-[length:200%_auto] text-base font-bold text-white shadow-[0_0_50px_rgba(34,211,238,0.2)] hover:shadow-[0_0_70px_rgba(34,211,238,0.4)] animate-[gradient-shift_3s_ease_infinite] hover:scale-[1.01] transition-transform duration-300"
+            {/* CTA — gold gradient, matches hero.
+                Replaces from-cyan-500 via-blue-500 to-cyan-500. */}
+            <a
+              href="https://pay.kiwify.com.br/P5bPQp4"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative w-full inline-flex items-center justify-center gap-3 overflow-hidden"
+              style={{
+                borderRadius: "16px",
+                height: "64px",
+                background: "linear-gradient(135deg, #7C5C00 0%, #B8860B 45%, #D4A847 100%)",
+                boxShadow: "0 0 0 1px rgba(212,168,71,0.28), 0 2px 4px rgba(0,0,0,0.50), 0 8px 28px -4px rgba(180,130,10,0.45), inset 0 1px 0 rgba(255,255,255,0.18)",
+                transition: "transform 0.2s ease, box-shadow 0.2s ease",
+                cursor: "pointer",
+              }}
+              onMouseEnter={e => {
+                const el = e.currentTarget as HTMLElement
+                el.style.transform = "translateY(-2px)"
+                el.style.boxShadow = "0 0 0 1px rgba(212,168,71,0.45), 0 2px 4px rgba(0,0,0,0.50), 0 16px 48px -4px rgba(200,150,20,0.60), inset 0 1px 0 rgba(255,255,255,0.22)"
+              }}
+              onMouseLeave={e => {
+                const el = e.currentTarget as HTMLElement
+                el.style.transform = "translateY(0)"
+                el.style.boxShadow = "0 0 0 1px rgba(212,168,71,0.22), 0 2px 4px rgba(0,0,0,0.50), 0 8px 24px -4px rgba(160,110,0,0.35), inset 0 1px 0 rgba(255,255,255,0.14)"
+              }}
             >
-              <a
-                href="https://pay.kiwify.com.br/P5bPQp4"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-3"
-              >
+              <div
+                className="-translate-x-full group-hover:translate-x-full absolute inset-0"
+                style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.13), transparent)", transition: "transform 0.5s ease" }}
+              />
+              <span style={{ fontSize: "15px", fontWeight: 700, color: "#1A1000", position: "relative" }}>
                 Quero garantir minha vaga
-                <ArrowRight className="h-5 w-5" />
-              </a>
-            </Button>
+              </span>
+              <ArrowRight size={18} style={{ color: "rgba(26,16,0,0.70)", position: "relative" }} />
+            </a>
 
-            {/* Social proof */}
-            <div className="mt-6 flex items-center justify-center gap-2 text-sm text-white/25">
-              <Users className="h-3.5 w-3.5" />
-              <span>+500 profissionais já transformaram sua imagem</span>
-            </div>
+            {/* Social proof — icon removed */}
+            <p className="mt-5 text-center text-sm text-white/42">
+              +500 profissionais já transformaram sua imagem
+            </p>
 
-          </div>
+            {/* Minimal trust line — replaces the generic Shield footer stripe */}
+            <p className="mt-3 text-center text-xs text-white/28 tracking-wide">
+              Pagamento seguro · 7 dias de garantia
+            </p>
 
-          {/* Footer stripe */}
-          <div className="border-t border-white/[0.05] px-10 py-5 md:px-16 flex items-center justify-center gap-2 text-sm text-white/20">
-            <Shield className="h-3.5 w-3.5" />
-            <span>Pagamento 100% seguro</span>
           </div>
         </div>
 

@@ -10,50 +10,94 @@ const promises = [
 ]
 
 export function PromessaSection() {
-  const { ref: titleRef, isVisible: titleVisible } = useScrollAnimation()
-  const { ref: listRef, isVisible: listVisible } = useScrollAnimation()
+  const { ref: sectionRef, isVisible: sectionVisible } = useScrollAnimation()
 
   return (
-    <section className="relative bg-[#0a0a0f] py-32 px-6 md:py-44 overflow-hidden">
-      <div className="absolute top-0 inset-x-0 h-40 bg-gradient-to-b from-[#0d1117] to-transparent pointer-events-none" />
-      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-indigo-500/[0.04] rounded-full blur-[180px]" />
+    <section className="relative bg-[#0a0a0f] py-28 md:py-40 overflow-hidden">
+      {/* Section separator */}
+      <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/[0.07] to-transparent pointer-events-none" />
+      <div className="absolute top-0 inset-x-0 h-52 bg-gradient-to-b from-[#0d1117] to-transparent pointer-events-none" />
+      {/* Bottom blend into sobre */}
+      <div className="absolute bottom-0 inset-x-0 h-48 bg-gradient-to-t from-[#0d1117] to-transparent pointer-events-none" />
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full blur-[160px] pointer-events-none"
+        style={{ background: "radial-gradient(ellipse, rgba(99,102,241,0.07) 0%, rgba(212,168,71,0.04) 50%, transparent 70%)" }} />
+      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full blur-[140px] pointer-events-none"
+        style={{ background: "rgba(0,150,200,0.04)" }} />
 
-      <div className="relative mx-auto max-w-4xl">
+      {/* ══ Full-bleed 2-col split — headline left, promises right ══ */}
+      <div
+        ref={sectionRef}
+        className={`relative px-6 sm:px-8 lg:px-12 xl:px-20 scroll-stagger ${sectionVisible ? "visible" : ""}`}
+      >
+        <div className="lg:grid lg:grid-cols-[1fr_1fr] lg:gap-20 xl:gap-28 lg:items-start">
 
-        {/* Header */}
-        <div ref={titleRef} className={`mb-20 md:mb-28 scroll-fade-in ${titleVisible ? "visible" : ""}`}>
-          <p className="mb-8 text-[0.65rem] font-bold uppercase tracking-[0.22em] text-cyan-400/60">
-            A Solução
-          </p>
-          <h2 className="text-5xl font-black leading-[1.04] tracking-tight text-white md:text-7xl lg:text-[5.5rem]">
-            O que você vai<br />
-            <span className="text-white/25">sair sabendo.</span>
-          </h2>
-          <p className="mt-8 text-lg text-white/40 md:text-xl leading-relaxed">
-            Em <span className="text-cyan-400 font-semibold">4 horas</span> de evento presencial.
-          </p>
-        </div>
-
-        {/* Numbered list — editorial */}
-        <div ref={listRef} className={`scroll-fade-in ${listVisible ? "visible" : ""}`}>
-          {promises.map((promise, index) => (
-            <div
-              key={index}
-              className="group flex items-start gap-10 md:gap-16 border-t border-white/[0.06] py-10 md:py-12 last:border-b last:border-white/[0.06]"
-            >
-              <span
-                className="shrink-0 text-[3.5rem] font-black leading-none text-white/[0.06] tabular-nums select-none md:text-[4.5rem]"
-                aria-hidden="true"
-              >
-                {String(index + 1).padStart(2, "0")}
-              </span>
-              <p className="mt-1 text-xl font-semibold text-white/55 group-hover:text-white/85 transition-colors duration-300 md:text-2xl lg:text-3xl leading-snug tracking-tight">
-                {promise}
-              </p>
+          {/* Left — headline block, sticky on desktop */}
+          <div className="lg:sticky lg:top-24">
+            {/* Gold pill — consistent with hero / prova / dor */}
+            <div className="scroll-item stagger-1 from-left mb-9">
+              <div style={{
+                display: "inline-flex", alignItems: "center", gap: "8px",
+                padding: "5px 14px 5px 10px",
+                border: "1px solid rgba(212,168,71,0.22)",
+                borderRadius: "100px",
+                background: "linear-gradient(135deg, rgba(212,168,71,0.06) 0%, transparent 100%)",
+              }}>
+                <div style={{ width: 5, height: 5, borderRadius: "50%", background: "#D4A847", boxShadow: "0 0 6px rgba(212,168,71,0.60)", flexShrink: 0 }} />
+                <span style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(212,168,71,0.78)" }}>
+                  A Solução
+                </span>
+              </div>
             </div>
-          ))}
-        </div>
 
+            {/* Headline */}
+            <h2
+              className="scroll-item stagger-2 font-black leading-[0.93] tracking-[-0.04em] text-white"
+              style={{ fontSize: "clamp(3rem, 7vw, 6.5rem)" }}
+            >
+              O que você vai<br />
+              <span style={{ color: "rgba(255,255,255,0.36)" }}>sair sabendo.</span>
+            </h2>
+
+            <p className="scroll-item stagger-3 mt-8 text-lg text-white/55 md:text-xl leading-relaxed">
+              Em{" "}
+              <span style={{ color: "#D4A847", fontWeight: 600 }}>4 horas</span>{" "}
+              de evento presencial.
+            </p>
+          </div>
+
+          {/* Right — promise list with vertical gold bars
+              Structurally different from DorSection (horizontal border-t rows).
+              Vertical bars = affirmative, columns = solution energy. */}
+          <div className="mt-14 lg:mt-0">
+            {promises.map((promise, index) => (
+              <div
+                key={index}
+                className="scroll-item group flex items-start gap-6 py-7 border-t"
+                style={{
+                  borderColor: "rgba(255,255,255,0.07)",
+                  transitionDelay: `${index * 80}ms`,
+                }}
+              >
+                {/* Vertical accent bar */}
+                <div style={{
+                  width: "2px", flexShrink: 0, minHeight: "28px",
+                  background: "rgba(212,168,71,0.24)",
+                  borderRadius: "2px", marginTop: "4px",
+                  transition: "background 0.3s ease",
+                }}
+                  // brighten on parent hover via JS — CSS group-hover doesn't reach style props
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "rgba(212,168,71,0.55)" }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "rgba(212,168,71,0.24)" }}
+                />
+                <p className="text-xl font-semibold text-white/72 group-hover:text-white transition-colors duration-300 md:text-2xl lg:text-3xl leading-snug tracking-tight">
+                  {promise}
+                </p>
+              </div>
+            ))}
+            <div className="border-t" style={{ borderColor: "rgba(255,255,255,0.07)" }} />
+          </div>
+
+        </div>
       </div>
     </section>
   )

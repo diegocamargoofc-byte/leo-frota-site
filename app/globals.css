@@ -119,8 +119,13 @@
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+    scroll-behavior: smooth;
+  }
   body {
     @apply bg-background text-foreground;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }
 
@@ -205,6 +210,12 @@
   to   { opacity: 1; transform: translateY(0);    filter: blur(0);   }
 }
 
+/* Minimal elegant fade-up — used for headline lines */
+@keyframes headline-fade-up {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
 /* "clientes" — two-phase entrance.
    Phase 1 (0→55%): blur dissolves, word appears.
    Phase 2 (55%→100%): word settles from float to exact position.
@@ -245,6 +256,45 @@
   }
 }
 
+/* Hero card gentle float — composited layer, no layout impact */
+@keyframes hero-card-float {
+  0%, 100% { transform: translateY(0px);  }
+  50%       { transform: translateY(-9px); }
+}
+
+/* CTA ring pulse — rings out from button border */
+@keyframes cta-ping-ring {
+  0%        { opacity: 0.55; transform: scale(1);    }
+  70%, 100% { opacity: 0;    transform: scale(1.09); }
+}
+
+/* ── Testimonial cards — staggered idle float (desktop only) ─────────────────
+   Three variants with different duration + delay so cards float out-of-phase.
+   Wrapped in md breakpoint — no float on mobile (horizontal scroll context).
+────────────────────────────────────────────────────────────────────────────── */
+@keyframes testimonial-float {
+  0%, 100% { transform: translateY(0px);  }
+  50%       { transform: translateY(-7px); }
+}
+
+@media (min-width: 768px) {
+  .testimonial-float-a { animation: testimonial-float 7s   ease-in-out        infinite; will-change: transform; }
+  .testimonial-float-b { animation: testimonial-float 6.5s ease-in-out 0.9s   infinite; will-change: transform; }
+  .testimonial-float-c { animation: testimonial-float 7.5s ease-in-out 1.8s   infinite; will-change: transform; }
+}
+
+/* Play button idle pulse ring */
+@keyframes play-pulse-ring {
+  0%        { opacity: 0.50; transform: scale(1);    }
+  65%, 100% { opacity: 0;    transform: scale(1.55); }
+}
+
+/* Final CTA breathing halo — slow atmospheric glow behind the button */
+@keyframes cta-breathe {
+  0%, 100% { opacity: 0.38; transform: scale(0.94); }
+  50%       { opacity: 0.80; transform: scale(1.06); }
+}
+
 .animate-gradient-shift {
   background-size: 200% 200%;
   animation: gradient-shift 8s ease infinite;
@@ -269,13 +319,23 @@
   animation: shimmer 2s ease-in-out infinite;
 }
 
-/* Scroll-triggered animations */
+/* ── Scroll-triggered animations ───────────────────────────────────────────
+   Easing  : cubic-bezier(0.22,1,0.36,1) — sharp launch, smooth land.
+   Distance: 10px — elements reveal, not fly in. Motion is barely perceptible.
+   Duration: 0.72s — matches eye-tracking on typical scroll velocity.
+   GPU     : will-change on all animated elements — composited layer,
+             no layout recalc, no paint on every frame.
+   Trigger : rootMargin -48px (hook) — fires as element enters view.
+──────────────────────────────────────────────────────────────────────────── */
+
+/* Block fade — whole container enters as one */
 .scroll-fade-in {
   opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  transform: translateY(10px);
+  will-change: transform, opacity;
+  transition: opacity 0.72s cubic-bezier(0.22,1,0.36,1),
+              transform 0.72s cubic-bezier(0.22,1,0.36,1);
 }
-
 .scroll-fade-in.visible {
   opacity: 1;
   transform: translateY(0);
@@ -283,10 +343,11 @@
 
 .scroll-fade-in-left {
   opacity: 0;
-  transform: translateX(-40px);
-  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  transform: translateX(-14px);
+  will-change: transform, opacity;
+  transition: opacity 0.72s cubic-bezier(0.22,1,0.36,1),
+              transform 0.72s cubic-bezier(0.22,1,0.36,1);
 }
-
 .scroll-fade-in-left.visible {
   opacity: 1;
   transform: translateX(0);
@@ -294,10 +355,11 @@
 
 .scroll-fade-in-right {
   opacity: 0;
-  transform: translateX(40px);
-  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  transform: translateX(14px);
+  will-change: transform, opacity;
+  transition: opacity 0.72s cubic-bezier(0.22,1,0.36,1),
+              transform 0.72s cubic-bezier(0.22,1,0.36,1);
 }
-
 .scroll-fade-in-right.visible {
   opacity: 1;
   transform: translateX(0);
@@ -305,16 +367,70 @@
 
 .scroll-scale-in {
   opacity: 0;
-  transform: scale(0.95);
-  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  transform: scale(0.98) translateY(10px);
+  will-change: transform, opacity;
+  transition: opacity 0.82s cubic-bezier(0.22,1,0.36,1),
+              transform 0.82s cubic-bezier(0.22,1,0.36,1);
 }
-
 .scroll-scale-in.visible {
   opacity: 1;
-  transform: scale(1);
+  transform: scale(1) translateY(0);
 }
 
-/* Staggered delays */
+/* ── Stagger group ───────────────────────────────────────────────────────────
+   Parent carries ref + .visible toggle.
+   Children carry .scroll-item + .stagger-N for sequenced entrance.
+   Directional variant: .from-left slides in from the left — use on eyebrows.
+────────────────────────────────────────────────────────────────────────── */
+.scroll-stagger .scroll-item {
+  opacity: 0;
+  transform: translateY(10px);
+  will-change: transform, opacity;
+  transition: opacity 0.72s cubic-bezier(0.22,1,0.36,1),
+              transform 0.72s cubic-bezier(0.22,1,0.36,1);
+}
+.scroll-stagger.visible .scroll-item {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Eyebrow slide-in from left — the primary directional element.
+   Kept wider (22px) so pills feel decisively placed while content rises subtly. */
+.scroll-stagger .scroll-item.from-left {
+  transform: translateX(-22px) translateY(8px);
+}
+.scroll-stagger.visible .scroll-item.from-left {
+  transform: translateX(0) translateY(0);
+}
+
+/* Card scale-up entry — composed reveal, not theatrical drop */
+.scroll-stagger .scroll-item.scale-in {
+  transform: scale(0.98) translateY(10px);
+}
+.scroll-stagger.visible .scroll-item.scale-in {
+  transform: scale(1) translateY(0);
+}
+
+/* Stagger delay steps — 100ms intervals for clean visual rhythm */
+.stagger-1 { transition-delay: 0ms;   }
+.stagger-2 { transition-delay: 100ms; }
+.stagger-3 { transition-delay: 200ms; }
+.stagger-4 { transition-delay: 300ms; }
+.stagger-5 { transition-delay: 400ms; }
+.stagger-6 { transition-delay: 500ms; }
+.stagger-7 { transition-delay: 600ms; }
+.stagger-8 { transition-delay: 700ms; }
+
+/* Later items in a stagger group decelerate naturally — creates physical weight.
+   Items 5+ are typically body text or details; settling slower makes them feel grounded. */
+.scroll-stagger .scroll-item.stagger-5,
+.scroll-stagger .scroll-item.stagger-6,
+.scroll-stagger .scroll-item.stagger-7,
+.scroll-stagger .scroll-item.stagger-8 {
+  transition-duration: 0.80s;
+}
+
+/* Legacy delay utilities */
 .delay-100 { transition-delay: 100ms; }
 .delay-200 { transition-delay: 200ms; }
 .delay-300 { transition-delay: 300ms; }
@@ -493,12 +609,7 @@
   transform: translateY(-2px);
 }
 
-/* Staggered animation delays for lists */
-.stagger-1 { transition-delay: 50ms; }
-.stagger-2 { transition-delay: 100ms; }
-.stagger-3 { transition-delay: 150ms; }
-.stagger-4 { transition-delay: 200ms; }
-.stagger-5 { transition-delay: 250ms; }
+/* Stagger delays defined above in the scroll-stagger block */
 
 /* Smooth entrance for sections */
 .section-enter {
@@ -521,7 +632,10 @@
   .scroll-fade-in,
   .scroll-fade-in-left,
   .scroll-fade-in-right,
-  .scroll-scale-in {
+  .scroll-scale-in,
+  .scroll-stagger .scroll-item,
+  .scroll-stagger .scroll-item.from-left,
+  .scroll-stagger .scroll-item.scale-in {
     transition: none;
     opacity: 1;
     transform: none;
@@ -530,6 +644,16 @@
   .glow-pulse-subtle,
   .animate-glow-pulse,
   .animate-float {
+    animation: none;
+  }
+
+  .testimonial-float-a,
+  .testimonial-float-b,
+  .testimonial-float-c {
+    animation: none;
+  }
+
+  .cta-breathe-halo {
     animation: none;
   }
 }

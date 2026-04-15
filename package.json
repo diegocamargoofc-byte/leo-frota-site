@@ -9,6 +9,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@21st-sdk/agent": "^0.0.16",
     "@hookform/resolvers": "^3.9.1",
     "@radix-ui/react-accordion": "1.2.12",
     "@radix-ui/react-alert-dialog": "1.1.15",
@@ -44,6 +45,7 @@
     "cmdk": "1.1.1",
     "date-fns": "4.1.0",
     "embla-carousel-react": "8.6.0",
+    "framer-motion": "^12.38.0",
     "input-otp": "1.4.2",
     "lucide-react": "^0.564.0",
     "next": "16.2.0",
@@ -57,7 +59,7 @@
     "sonner": "^1.7.1",
     "tailwind-merge": "^3.3.1",
     "vaul": "^1.1.2",
-    "zod": "^3.24.1"
+    "zod": "^3.25.76"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.2.0",
@@ -68,5 +70,17 @@
     "tailwindcss": "^4.2.0",
     "tw-animate-css": "1.3.3",
     "typescript": "5.7.3"
-  }
+  },
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/diegocamargoofc-byte/leo-frota-site.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/diegocamargoofc-byte/leo-frota-site/issues"
+  },
+  "homepage": "https://github.com/diegocamargoofc-byte/leo-frota-site#readme"
 }
