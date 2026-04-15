@@ -15,7 +15,7 @@ export function AutoridadeSection() {
   const { ref: contentRef, isVisible: contentVisible } = useScrollAnimation()
 
   return (
-    <section className="relative bg-gradient-to-br from-[#0d1117] via-[#0f1219] to-[#12101f] py-24 px-6 md:py-32 overflow-hidden">
+    <section className="relative bg-gradient-to-br from-[#0a0a0f] via-[#0f1219] to-[#12101f] py-32 px-6 md:py-44 overflow-hidden">
       {/* Mobile watermarks - AUTORIDADE cut off left */}
       <div className="absolute top-8 -left-12 pointer-events-none select-none md:hidden overflow-visible">
         <span
@@ -55,6 +55,9 @@ export function AutoridadeSection() {
           MENTOR
         </span>
       </div>
+
+      {/* Blend from conteudo section */}
+      <div className="absolute top-0 inset-x-0 h-32 bg-gradient-to-b from-[#0a0a0f] to-transparent pointer-events-none" />
 
       {/* Background glows - cyan and indigo mix */}
       <div className="absolute left-1/4 top-1/2 -translate-y-1/2 -translate-x-1/2 w-[400px] h-[400px] bg-cyan-500/5 rounded-full blur-[150px]" />
@@ -112,15 +115,15 @@ export function AutoridadeSection() {
 
           {/* Content */}
           <div className="flex-1 w-full text-center md:text-left">
-            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400/80">
+            <p className="mb-3 text-[0.7rem] font-bold uppercase tracking-[0.2em] text-cyan-400/70">
               Quem vai conduzir
             </p>
             
-            <h2 className="mb-2 text-4xl font-bold text-white md:text-5xl lg:text-6xl tracking-tight">
-              Leonardo Frota
+            <h2 className="mb-2 text-5xl font-black text-white md:text-6xl lg:text-7xl tracking-tight leading-[1.04]">
+              Leonardo<br />Frota
             </h2>
-            
-            <p className="mb-8 text-base text-white/50 font-medium">
+
+            <p className="mb-10 text-base text-white/40 font-medium">
               Especialista em Posicionamento e Imagem Profissional
             </p>
 
@@ -129,9 +132,9 @@ export function AutoridadeSection() {
               {credentials.map((cred, i) => (
                 <div
                   key={i}
-                  className="flex items-center gap-4"
+                  className="group flex items-center gap-4"
                 >
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/5 text-white/60 border border-white/10">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-500/15 to-blue-500/10 text-cyan-400/80 border border-cyan-500/20 transition-all duration-300 group-hover:from-cyan-500/25 group-hover:to-blue-500/20 group-hover:border-cyan-500/40">
                     <cred.icon className="h-5 w-5" />
                   </div>
                   <span className="text-white/60 text-sm md:text-[15px] text-left">{cred.text}</span>

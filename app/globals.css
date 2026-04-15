@@ -155,6 +155,78 @@
   }
 }
 
+/* ─── Hero entrance animations ───────────────────────────────────────────────
+   expo-out easing: snappy start, elegant settle.
+   fill-mode: both holds `from` during delay so elements stay invisible.
+─────────────────────────────────────────────────────────────────────────── */
+
+@keyframes hero-enter-strong {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+@keyframes hero-enter-soft {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+@keyframes hero-enter-cta {
+  from { opacity: 0; transform: translateY(12px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0)    scale(1);    }
+}
+
+@keyframes hero-enter-card {
+  from { opacity: 0; transform: scale(0.96) translateY(16px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0);    }
+}
+
+/* ─── Blur-to-sharp word entrance animations ─────────────────────────────────
+   Three tiers: small text → large word → hero payoff word.
+   Each tier increases blur radius and adds more physical weight to the motion.
+   filter: blur() only affects the element itself — no layout cost.
+─────────────────────────────────────────────────────────────────────────── */
+
+/* Small setup text — soft blur, short travel */
+@keyframes word-enter {
+  from { opacity: 0; transform: translateY(12px); filter: blur(3px); }
+  to   { opacity: 1; transform: translateY(0);    filter: blur(0);   }
+}
+
+/* "afastando" — maskable stamp-up. No blur, no opacity.
+   Parent must have overflow:hidden to act as the reveal window. */
+@keyframes line-reveal {
+  from { transform: translateY(108%); }
+  to   { transform: translateY(0);    }
+}
+
+/* headline-enter kept for possible reuse */
+@keyframes headline-enter {
+  from { opacity: 0; transform: translateY(22px); filter: blur(8px); }
+  to   { opacity: 1; transform: translateY(0);    filter: blur(0);   }
+}
+
+/* "clientes" — two-phase entrance.
+   Phase 1 (0→55%): blur dissolves, word appears.
+   Phase 2 (55%→100%): word settles from float to exact position.
+   The word is visible before it fully lands — intentional emphasis. */
+@keyframes clientes-enter {
+  from {
+    opacity: 0;
+    transform: translateY(32px) scale(0.93);
+    filter: blur(12px);
+  }
+  55% {
+    opacity: 1;
+    transform: translateY(8px) scale(0.98);
+    filter: blur(0.4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
 @keyframes shimmer {
   0% {
     background-position: -200% 0;

@@ -41,44 +41,59 @@ export function ConteudoSection() {
   const { ref: gridRef, isVisible: gridVisible } = useScrollAnimation()
 
   return (
-    <section className="relative bg-[#0a0a0f] py-24 px-6 md:py-32 overflow-hidden">
-      {/* Background glows */}
-      <div className="absolute top-20 left-10 w-[300px] h-[300px] bg-cyan-500/5 rounded-full blur-[100px]" />
-      <div className="absolute bottom-20 right-10 w-[300px] h-[300px] bg-blue-500/5 rounded-full blur-[100px]" />
+    <section className="relative bg-[#0a0a0f] py-32 px-6 md:py-44 overflow-hidden">
+      <div className="absolute top-0 inset-x-0 h-40 bg-gradient-to-b from-[#0d1117] to-transparent pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-[450px] h-[450px] bg-cyan-500/[0.04] rounded-full blur-[160px]" />
 
       <div className="relative mx-auto max-w-5xl">
-        <div ref={titleRef} className={`scroll-fade-in ${titleVisible ? "visible" : ""}`}>
-          <h2 className="mb-4 text-center text-3xl font-bold leading-tight tracking-tight text-white md:text-4xl lg:text-5xl">
-            O que você vai aprender
-          </h2>
-          <p className="mb-16 text-center text-lg text-white/50">
-            Conteúdo direto ao ponto. <span className="text-cyan-400">Sem enrolação.</span>
+
+        {/* Header — split layout */}
+        <div
+          ref={titleRef}
+          className={`mb-20 md:mb-28 flex flex-col gap-6 md:flex-row md:items-end md:justify-between scroll-fade-in ${titleVisible ? "visible" : ""}`}
+        >
+          <div>
+            <p className="mb-8 text-[0.65rem] font-bold uppercase tracking-[0.22em] text-cyan-400/60">
+              Conteúdo
+            </p>
+            <h2 className="text-5xl font-black leading-[1.04] tracking-tight text-white md:text-6xl lg:text-7xl">
+              O que você<br />vai aprender.
+            </h2>
+          </div>
+          <p className="text-base text-white/35 leading-relaxed md:max-w-[200px] md:text-right md:pb-1 shrink-0">
+            Direto ao ponto.<br />
+            <span className="text-cyan-400/80">Sem enrolação.</span>
           </p>
         </div>
 
+        {/* Feature grid — architectural, left-border treatment */}
         <div
           ref={gridRef}
-          className={`grid gap-6 md:grid-cols-2 lg:grid-cols-3 scroll-fade-in ${gridVisible ? "visible" : ""}`}
+          className={`grid grid-cols-1 md:grid-cols-2 gap-x-20 gap-y-0 scroll-fade-in ${gridVisible ? "visible" : ""}`}
         >
           {contents.map((item, index) => {
             const Icon = item.icon
             return (
               <div
                 key={index}
-                className="group rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm p-6 transition-all duration-500 hover:border-cyan-500/30 hover:bg-gradient-to-br hover:from-cyan-500/10 hover:to-transparent hover:shadow-[0_0_40px_rgba(34,211,238,0.1)]"
-                style={{ transitionDelay: `${index * 80}ms` }}
+                className="group flex items-start gap-6 border-t border-white/[0.06] py-8 md:py-10"
               >
-                <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 text-cyan-400 transition-all duration-300 group-hover:from-cyan-500/30 group-hover:to-blue-500/30 group-hover:scale-110 group-hover:shadow-lg group-hover:shadow-cyan-500/20">
-                  <Icon className="h-7 w-7" />
+                <div className="shrink-0 mt-0.5 text-white/20 group-hover:text-cyan-400/70 transition-colors duration-300">
+                  <Icon className="h-5 w-5" />
                 </div>
-                <h3 className="mb-2 text-lg font-semibold text-white group-hover:text-cyan-100 transition-colors">
-                  {item.title}
-                </h3>
-                <p className="text-white/50 group-hover:text-white/70 transition-colors">{item.description}</p>
+                <div>
+                  <h3 className="mb-1.5 text-lg font-bold text-white/75 group-hover:text-white transition-colors duration-300 tracking-tight">
+                    {item.title}
+                  </h3>
+                  <p className="text-sm text-white/35 leading-relaxed group-hover:text-white/55 transition-colors duration-300">
+                    {item.description}
+                  </p>
+                </div>
               </div>
             )
           })}
         </div>
+
       </div>
     </section>
   )

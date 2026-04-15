@@ -31,17 +31,17 @@ export function FaqSection() {
   const { ref: accordionRef, isVisible: accordionVisible } = useScrollAnimation()
 
   return (
-    <section className="relative bg-[#0d1117] py-24 px-6 md:py-32 overflow-hidden">
-      {/* Subtle background */}
-      <div className="absolute inset-0 opacity-[0.02]" style={{
-        backgroundImage: `radial-gradient(circle at 1px 1px, white 1px, transparent 0)`,
-        backgroundSize: '40px 40px'
-      }} />
+    <section className="relative bg-[#0d1117] py-32 px-6 md:py-44 overflow-hidden">
+      {/* Blend from oferta section */}
+      <div className="absolute top-0 inset-x-0 h-40 bg-gradient-to-b from-[#08080c] to-transparent pointer-events-none" />
 
       <div className="relative mx-auto max-w-3xl">
         <div ref={titleRef} className={`scroll-fade-in ${titleVisible ? "visible" : ""}`}>
-          <h2 className="mb-16 text-center text-3xl font-bold tracking-tight text-white md:text-4xl lg:text-5xl">
-            Perguntas Frequentes
+          <p className="mb-8 text-center text-[0.65rem] font-bold uppercase tracking-[0.22em] text-cyan-400/60">
+            Dúvidas
+          </p>
+          <h2 className="mb-16 text-center text-4xl font-black tracking-tight text-white md:text-5xl lg:text-6xl">
+            Perguntas<br className="md:hidden" /> Frequentes
           </h2>
         </div>
 
