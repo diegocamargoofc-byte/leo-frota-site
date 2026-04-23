@@ -327,206 +327,96 @@ export function HeroSection() {
         </div>
 
 
-        {/* ── CARD COLUMN ── */}
+        {/* ── IMAGE COLUMN ── */}
         <div
-          className="order-1 lg:order-2 relative flex justify-center lg:justify-end"
+          className="order-1 lg:order-2 relative flex justify-center lg:justify-end items-end"
           style={cardEntrance}
         >
-          {/* Pool de sombra abaixo do card — ancora visualmente, elimina sensação de flutuação */}
+          {/* Glow atrás do personagem — azul/ciano, bem sutil */}
           <div
             aria-hidden="true"
             className="absolute pointer-events-none"
             style={{
-              bottom: "-28px",
-              left: "5%", right: "5%",
-              height: "56px",
-              background: "radial-gradient(ellipse 80% 100% at 50% 100%, rgba(0,0,0,0.55) 0%, transparent 70%)",
-              filter: "blur(14px)",
+              bottom: "0",
+              left: "50%",
+              transform: "translateX(-50%)",
+              width: "80%",
+              height: "90%",
+              background: "radial-gradient(ellipse 65% 70% at 50% 55%, rgba(0,100,220,0.18) 0%, rgba(0,60,160,0.08) 50%, transparent 75%)",
+              filter: "blur(40px)",
               zIndex: 0,
             }}
           />
 
-          {/* Card wrapper */}
+          {/* Imagem solta — sem container, sem borda, sem card */}
           <div
-            className="relative w-full aspect-[3/4] max-w-[300px] sm:max-w-[330px] mx-auto lg:max-w-full lg:mx-0"
+            className="relative w-full max-w-[320px] sm:max-w-[360px] lg:max-w-full mx-auto lg:mx-0"
             style={{
               zIndex: 1,
               animation: mounted ? "hero-card-float 6s ease-in-out infinite" : undefined,
               willChange: "transform",
             }}
           >
-            {/* Metallic/glass border shell */}
-            <div
-              className="absolute inset-0"
+            <img
+              src="/images/leonardo.svg"
+              alt="Leonardo Frota"
+              className="w-full h-auto block"
               style={{
-                borderRadius: "18px",
-                padding: "1px",
-                background: [
-                  "linear-gradient(145deg,",
-                  "rgba(255,255,255,0.28) 0%,",      /* top-left: bright specular hit */
-                  "rgba(200,220,255,0.10) 18%,",     /* cool silver */
-                  "rgba(255,255,255,0.03) 42%,",     /* near-transparent mid */
-                  "rgba(100,160,255,0.06) 68%,",     /* faint blue shimmer */
-                  "rgba(0,100,220,0.18) 100%",       /* bottom-right: blue edge light */
-                  ")",
-                ].join(" "),
-                boxShadow: [
-                  /* outer glow ring — glass rim */
-                  "0 0 0 1px rgba(255,255,255,0.04)",
-                  /* close sharp shadow */
-                  "0 2px 4px rgba(0,0,0,0.85)",
-                  /* mid-range */
-                  "0 8px 24px rgba(0,0,0,0.65)",
-                  /* wide ambient */
-                  "0 28px 60px rgba(0,0,0,0.42)",
-                  /* deep cinematic halo */
-                  "0 60px 110px rgba(0,0,0,0.22)",
-                  /* subtle blue inner glow */
-                  "inset 0 1px 0 rgba(180,210,255,0.09)",
-                ].join(", "),
+                objectFit: "contain",
+                objectPosition: "bottom center",
+              }}
+            />
+
+            {/* Authority badge — flutua no topo direito da imagem */}
+            <div
+              style={{
+                position: "absolute", top: "8%", right: "4%", zIndex: 4,
+                display: "inline-flex", alignItems: "center", gap: "5px",
+                padding: "4px 10px",
+                background: "linear-gradient(135deg, rgba(212,168,71,0.14) 0%, rgba(180,130,10,0.06) 100%)",
+                border: "1px solid rgba(212,168,71,0.30)",
+                borderRadius: "100px",
+                backdropFilter: "blur(8px)",
               }}
             >
-              {/* Card inner */}
-              <div
-                className="relative overflow-hidden w-full h-full"
-                style={{
-                  borderRadius: "17px",
-                  background: "linear-gradient(185deg, #061428 0%, #040d1e 35%, #020a18 65%, #010508 100%)",
-                }}
-              >
-                {/* Primary studio spotlight — key light behind speaker, top-center */}
-                <div
-                  aria-hidden="true"
-                  className="absolute inset-0 pointer-events-none"
-                  style={{
-                    background: "radial-gradient(ellipse 72% 85% at 50% 58%, rgba(0,90,220,0.44) 0%, rgba(0,55,160,0.24) 28%, rgba(0,30,100,0.10) 55%, transparent 78%)",
-                    zIndex: 0,
-                  }}
-                />
-                {/* Rim kicker — cool side light from top-left, simulates studio fill */}
-                <div
-                  aria-hidden="true"
-                  className="absolute inset-0 pointer-events-none"
-                  style={{
-                    background: "radial-gradient(ellipse 55% 40% at 18% 10%, rgba(110,170,255,0.14) 0%, rgba(60,120,220,0.06) 45%, transparent 72%)",
-                    zIndex: 0,
-                  }}
-                />
-                {/* Warm ground — subtle amber at very bottom to anchor feet */}
-                <div
-                  aria-hidden="true"
-                  className="absolute inset-0 pointer-events-none"
-                  style={{
-                    background: "radial-gradient(ellipse 80% 30% at 50% 100%, rgba(0,40,100,0.18) 0%, transparent 70%)",
-                    zIndex: 0,
-                  }}
-                />
+              <div style={{ width: 4, height: 4, borderRadius: "50%", background: "#D4A847", boxShadow: "0 0 5px rgba(212,168,71,0.8)", flexShrink: 0 }} />
+              <span style={{
+                fontSize: "8.5px", fontWeight: 700, letterSpacing: "0.20em",
+                textTransform: "uppercase", color: "rgba(212,168,71,0.88)",
+              }}>
+                Edição 2026
+              </span>
+            </div>
 
-                {/* Foto SVG sem fundo — personagem já recortado, nitidez máxima */}
-                <img
-                  src="/images/leonardo.svg"
-                  alt="Leonardo Frota"
-                  className="absolute"
-                  style={{
-                    bottom: 0,
-                    left: "50%",
-                    transform: "translateX(-50%)",
-                    width: "108%",
-                    height: "auto",
-                    objectFit: "contain",
-                    objectPosition: "bottom center",
-                    zIndex: 1,
-                  }}
-                />
-
-                {/* Vignette lateral — profundidade cinematográfica */}
-                <div
-                  aria-hidden="true"
-                  className="absolute inset-0 pointer-events-none"
-                  style={{
-                    background: "radial-gradient(ellipse 70% 90% at 50% 40%, transparent 45%, rgba(0,0,0,0.38) 100%)",
-                    zIndex: 2,
-                  }}
-                />
-
-                {/* Inner glass edge — hairline highlight traces the card top */}
-                <div
-                  aria-hidden="true"
-                  className="absolute inset-x-0 top-0 pointer-events-none"
-                  style={{
-                    height: "1px",
-                    background: "linear-gradient(to right, transparent 0%, rgba(255,255,255,0.18) 30%, rgba(255,255,255,0.22) 55%, rgba(200,220,255,0.08) 80%, transparent 100%)",
-                    zIndex: 3,
-                  }}
-                />
-
-                {/* Authority badge — floats top-right, gold credential anchor */}
-                <div
-                  style={{
-                    position: "absolute", top: "14px", right: "14px", zIndex: 4,
-                    display: "inline-flex", alignItems: "center", gap: "5px",
-                    padding: "4px 10px",
-                    background: "linear-gradient(135deg, rgba(212,168,71,0.14) 0%, rgba(180,130,10,0.06) 100%)",
-                    border: "1px solid rgba(212,168,71,0.30)",
-                    borderRadius: "100px",
-                    backdropFilter: "blur(8px)",
-                  }}
-                >
-                  <div style={{ width: 4, height: 4, borderRadius: "50%", background: "#D4A847", boxShadow: "0 0 5px rgba(212,168,71,0.8)", flexShrink: 0 }} />
-                  <span style={{
-                    fontSize: "8.5px", fontWeight: 700, letterSpacing: "0.20em",
-                    textTransform: "uppercase", color: "rgba(212,168,71,0.88)",
-                  }}>
-                    Edição 2026
+            {/* Event strip — base da imagem */}
+            <div
+              className="absolute bottom-0 inset-x-0 px-3 py-2.5"
+              style={{ zIndex: 3 }}
+            >
+              <div className="flex items-center gap-3 flex-wrap">
+                <div className="flex items-center gap-1.5">
+                  <MapPin size={9} style={{ color: "rgba(0,191,255,0.78)", flexShrink: 0 }} />
+                  <span style={{ fontSize: "9.5px", fontWeight: 500, letterSpacing: "0.07em", color: "rgba(255,255,255,0.62)" }}>
+                    SEST SENAT
                   </span>
                 </div>
-
-                {/* Reflexo de luz no topo — especular sutil */}
-                <div
-                  aria-hidden="true"
-                  className="absolute inset-x-0 top-0 pointer-events-none"
-                  style={{
-                    height: "35%",
-                    background: "linear-gradient(to bottom, rgba(80,140,255,0.07) 0%, transparent 100%)",
-                    zIndex: 2,
-                  }}
-                />
-
-                {/* Event strip — posicionado acima da zona transparente da máscara */}
-                <div
-                  className="absolute bottom-0 inset-x-0 px-4 py-3 pointer-events-none"
-                  style={{
-                    zIndex: 3,
-                    background: "linear-gradient(to top, rgba(3,8,18,0.82) 0%, transparent 100%)",
-                  }}
-                >
-                  <div className="flex items-center gap-4 flex-wrap">
-                    <div className="flex items-center gap-1.5">
-                      <MapPin size={9} style={{ color: "rgba(0,191,255,0.78)", flexShrink: 0 }} />
-                      <span style={{ fontSize: "9.5px", fontWeight: 500, letterSpacing: "0.07em", color: "rgba(255,255,255,0.62)" }}>
-                        SEST SENAT
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      <Calendar size={9} style={{ color: "rgba(0,191,255,0.78)", flexShrink: 0 }} />
-                      <span style={{ fontSize: "9.5px", fontWeight: 500, letterSpacing: "0.07em", color: "rgba(255,255,255,0.62)" }}>
-                        14 Mai
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      <Clock size={9} style={{ color: "rgba(0,191,255,0.78)", flexShrink: 0 }} />
-                      <span style={{ fontSize: "9.5px", fontWeight: 500, letterSpacing: "0.07em", color: "rgba(255,255,255,0.62)" }}>
-                        18h – 22h
-                      </span>
-                    </div>
-                  </div>
+                <div className="flex items-center gap-1.5">
+                  <Calendar size={9} style={{ color: "rgba(0,191,255,0.78)", flexShrink: 0 }} />
+                  <span style={{ fontSize: "9.5px", fontWeight: 500, letterSpacing: "0.07em", color: "rgba(255,255,255,0.62)" }}>
+                    14 Mai
+                  </span>
                 </div>
-
+                <div className="flex items-center gap-1.5">
+                  <Clock size={9} style={{ color: "rgba(0,191,255,0.78)", flexShrink: 0 }} />
+                  <span style={{ fontSize: "9.5px", fontWeight: 500, letterSpacing: "0.07em", color: "rgba(255,255,255,0.62)" }}>
+                    18h – 22h
+                  </span>
+                </div>
               </div>
             </div>
           </div>
 
-        </div>{/* end card column */}
+        </div>{/* end image column */}
 
       </div>
 
