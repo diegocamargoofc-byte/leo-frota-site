@@ -147,7 +147,7 @@ export function HeroSection() {
           Grid garante largura explícita para cada coluna —
           sem risco de texto comprimido ou card ocupando tudo.
       ══════════════════════════════════════════ */}
-      <div className="relative z-10 grid grid-cols-1 lg:grid-cols-[1fr_360px] xl:grid-cols-[1fr_380px] lg:items-center px-6 sm:px-8 lg:px-12 xl:px-16 py-8 lg:py-0 gap-8 lg:gap-8 xl:gap-10 max-w-[1100px] xl:max-w-[1200px] mx-auto w-full">
+      <div className="relative z-10 grid grid-cols-1 lg:grid-cols-[1fr_360px] xl:grid-cols-[1fr_380px] lg:items-center px-4 sm:px-8 lg:px-12 xl:px-16 pt-6 pb-4 lg:py-0 gap-6 lg:gap-8 xl:gap-10 max-w-[1100px] xl:max-w-[1200px] mx-auto w-full">
 
         {/* ── TEXT COLUMN ─────────────────────────── */}
         <div className="relative z-20 order-2 lg:order-1 flex flex-col justify-center lg:py-14">
@@ -332,7 +332,20 @@ export function HeroSection() {
           className="order-1 lg:order-2 relative flex justify-center lg:justify-end"
           style={cardEntrance}
         >
-          {/* Pool de sombra abaixo do card — ancora visualmente, elimina sensação de flutuação */}
+          {/* Glow atrás do personagem — spotlight ambiente azul/ciano */}
+          <div
+            aria-hidden="true"
+            className="absolute pointer-events-none"
+            style={{
+              top: "5%", left: "50%",
+              transform: "translateX(-50%)",
+              width: "90%", height: "85%",
+              background: "radial-gradient(ellipse 70% 65% at 50% 42%, rgba(0,120,255,0.22) 0%, rgba(0,70,200,0.10) 45%, transparent 72%)",
+              filter: "blur(32px)",
+              zIndex: 0,
+            }}
+          />
+          {/* Pool de sombra abaixo do card */}
           <div
             aria-hidden="true"
             className="absolute pointer-events-none"
@@ -340,15 +353,15 @@ export function HeroSection() {
               bottom: "-28px",
               left: "5%", right: "5%",
               height: "56px",
-              background: "radial-gradient(ellipse 80% 100% at 50% 100%, rgba(0,0,0,0.55) 0%, transparent 70%)",
-              filter: "blur(14px)",
+              background: "radial-gradient(ellipse 80% 100% at 50% 100%, rgba(0,0,0,0.65) 0%, transparent 70%)",
+              filter: "blur(16px)",
               zIndex: 0,
             }}
           />
 
-          {/* Card wrapper — aspect 3:4, proporcão mais cinematográfica */}
+          {/* Card wrapper */}
           <div
-            className="relative w-full aspect-[3/4] max-w-[260px] mx-auto lg:max-w-full lg:mx-0"
+            className="relative w-full max-w-[340px] sm:max-w-[360px] mx-auto lg:max-w-full lg:mx-0"
             style={{
               zIndex: 1,
               animation: mounted ? "hero-card-float 6s ease-in-out infinite" : undefined,
@@ -363,96 +376,87 @@ export function HeroSection() {
                 padding: "1px",
                 background: [
                   "linear-gradient(145deg,",
-                  "rgba(255,255,255,0.28) 0%,",      /* top-left: bright specular hit */
-                  "rgba(200,220,255,0.10) 18%,",     /* cool silver */
-                  "rgba(255,255,255,0.03) 42%,",     /* near-transparent mid */
-                  "rgba(100,160,255,0.06) 68%,",     /* faint blue shimmer */
-                  "rgba(0,100,220,0.18) 100%",       /* bottom-right: blue edge light */
+                  "rgba(255,255,255,0.28) 0%,",
+                  "rgba(200,220,255,0.10) 18%,",
+                  "rgba(255,255,255,0.03) 42%,",
+                  "rgba(100,160,255,0.06) 68%,",
+                  "rgba(0,100,220,0.18) 100%",
                   ")",
                 ].join(" "),
                 boxShadow: [
-                  /* outer glow ring — glass rim */
                   "0 0 0 1px rgba(255,255,255,0.04)",
-                  /* close sharp shadow */
                   "0 2px 4px rgba(0,0,0,0.85)",
-                  /* mid-range */
                   "0 8px 24px rgba(0,0,0,0.65)",
-                  /* wide ambient */
                   "0 28px 60px rgba(0,0,0,0.42)",
-                  /* deep cinematic halo */
                   "0 60px 110px rgba(0,0,0,0.22)",
-                  /* subtle blue inner glow */
                   "inset 0 1px 0 rgba(180,210,255,0.09)",
                 ].join(", "),
               }}
             >
               {/* Card inner */}
               <div
-                className="relative overflow-hidden w-full h-full"
+                className="relative overflow-hidden w-full"
                 style={{
                   borderRadius: "17px",
                   background: "linear-gradient(185deg, #061428 0%, #040d1e 35%, #020a18 65%, #010508 100%)",
+                  /* Aspect ratio dinâmico: menor no mobile, maior no desktop */
+                  aspectRatio: "3 / 4.6",
                 }}
               >
-                {/* Primary studio spotlight — key light behind speaker, top-center */}
+                {/* Spotlight radial atrás do personagem — bem intenso para premium */}
                 <div
                   aria-hidden="true"
                   className="absolute inset-0 pointer-events-none"
                   style={{
-                    background: "radial-gradient(ellipse 72% 85% at 50% 58%, rgba(0,90,220,0.44) 0%, rgba(0,55,160,0.24) 28%, rgba(0,30,100,0.10) 55%, transparent 78%)",
+                    background: "radial-gradient(ellipse 78% 90% at 50% 52%, rgba(0,100,240,0.52) 0%, rgba(0,60,180,0.28) 30%, rgba(0,30,110,0.12) 58%, transparent 78%)",
                     zIndex: 0,
                   }}
                 />
-                {/* Rim kicker — cool side light from top-left, simulates studio fill */}
+                {/* Rim kicker — luz de borda lateral esquerda */}
                 <div
                   aria-hidden="true"
                   className="absolute inset-0 pointer-events-none"
                   style={{
-                    background: "radial-gradient(ellipse 55% 40% at 18% 10%, rgba(110,170,255,0.14) 0%, rgba(60,120,220,0.06) 45%, transparent 72%)",
+                    background: "radial-gradient(ellipse 50% 38% at 12% 8%, rgba(120,180,255,0.18) 0%, rgba(60,120,220,0.07) 48%, transparent 72%)",
                     zIndex: 0,
                   }}
                 />
-                {/* Warm ground — subtle amber at very bottom to anchor feet */}
+                {/* Ciano accent — glow tênue ciano no topo, tech premium */}
                 <div
                   aria-hidden="true"
                   className="absolute inset-0 pointer-events-none"
                   style={{
-                    background: "radial-gradient(ellipse 80% 30% at 50% 100%, rgba(0,40,100,0.18) 0%, transparent 70%)",
+                    background: "radial-gradient(ellipse 60% 28% at 50% 0%, rgba(0,191,255,0.12) 0%, transparent 70%)",
+                    zIndex: 0,
+                  }}
+                />
+                {/* Ground anchor — base escura ancorada */}
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-0 pointer-events-none"
+                  style={{
+                    background: "radial-gradient(ellipse 90% 35% at 50% 100%, rgba(0,10,30,0.55) 0%, transparent 70%)",
                     zIndex: 0,
                   }}
                 />
 
-                {/* Foto com mask-image — corte invisível, dissolução natural na cintura */}
+                {/* Imagem SVG sem fundo — renderização nítida, sem compressão */}
                 <img
-                  src="/images/leonardo.png"
+                  src="/images/leonardo.svg"
                   alt="Leonardo Frota"
-                  className="absolute inset-0 w-full h-full"
+                  className="absolute w-full"
                   style={{
-                    objectFit: "cover",
-                    objectPosition: "top center",
+                    bottom: 0,
+                    left: "50%",
+                    transform: "translateX(-50%) scale(1.15)",
+                    transformOrigin: "bottom center",
+                    width: "100%",
+                    height: "auto",
+                    objectFit: "contain",
+                    objectPosition: "bottom center",
                     zIndex: 1,
-                    maskImage: [
-                      "linear-gradient(to top,",
-                      "transparent 0%,",
-                      "transparent 8%,",
-                      "rgba(0,0,0,0.12) 14%,",
-                      "rgba(0,0,0,0.40) 22%,",
-                      "rgba(0,0,0,0.72) 30%,",
-                      "rgba(0,0,0,0.92) 38%,",
-                      "black 48%",
-                      ")",
-                    ].join(" "),
-                    WebkitMaskImage: [
-                      "linear-gradient(to top,",
-                      "transparent 0%,",
-                      "transparent 8%,",
-                      "rgba(0,0,0,0.12) 14%,",
-                      "rgba(0,0,0,0.40) 22%,",
-                      "rgba(0,0,0,0.72) 30%,",
-                      "rgba(0,0,0,0.92) 38%,",
-                      "black 48%",
-                      ")",
-                    ].join(" "),
+                    imageRendering: "crisp-edges",
+                    filter: "contrast(1.08) saturate(1.12)",
                   }}
                 />
 
