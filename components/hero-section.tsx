@@ -329,52 +329,41 @@ export function HeroSection() {
 
         {/* ── IMAGE COLUMN ── */}
         <div
-          className="order-1 lg:order-2 relative flex justify-center lg:justify-end items-end"
+          className="order-1 lg:order-2 relative flex flex-col justify-end lg:justify-end items-center lg:items-end"
           style={cardEntrance}
         >
-          {/* Glow atrás do personagem — azul/ciano, bem sutil */}
+          {/* Wrapper externo — limita largura e faz float */}
           <div
-            aria-hidden="true"
-            className="absolute pointer-events-none"
+            className="relative w-full max-w-[300px] sm:max-w-[340px] lg:max-w-full mx-auto lg:mx-0"
             style={{
-              bottom: "0",
-              left: "50%",
-              transform: "translateX(-50%)",
-              width: "80%",
-              height: "90%",
-              background: "radial-gradient(ellipse 65% 70% at 50% 55%, rgba(0,100,220,0.18) 0%, rgba(0,60,160,0.08) 50%, transparent 75%)",
-              filter: "blur(40px)",
-              zIndex: 0,
-            }}
-          />
-
-          {/* Imagem solta — sem container, sem borda, sem card */}
-          <div
-            className="relative w-full max-w-[320px] sm:max-w-[360px] lg:max-w-full mx-auto lg:mx-0"
-            style={{
-              zIndex: 1,
               animation: mounted ? "hero-card-float 6s ease-in-out infinite" : undefined,
               willChange: "transform",
             }}
           >
-            <img
-              src="/images/leonardo.svg"
-              alt="Leonardo Frota"
-              className="w-full h-auto block"
+            {/* Glow de silhueta — posicionado atrás do corpo, não do container */}
+            <div
+              aria-hidden="true"
+              className="absolute pointer-events-none"
               style={{
-                objectFit: "contain",
-                objectPosition: "bottom center",
+                top: "8%",
+                left: "50%",
+                transform: "translateX(-50%)",
+                width: "75%",
+                height: "78%",
+                background: "radial-gradient(ellipse 60% 65% at 50% 42%, rgba(0,100,220,0.20) 0%, rgba(0,60,160,0.09) 52%, transparent 78%)",
+                filter: "blur(36px)",
+                zIndex: 0,
               }}
             />
 
-            {/* Authority badge — flutua no topo direito da imagem */}
+            {/* Authority badge — topo direito, fora do container de corte */}
             <div
               style={{
-                position: "absolute", top: "8%", right: "4%", zIndex: 4,
+                position: "absolute", top: "4%", right: "2%", zIndex: 10,
                 display: "inline-flex", alignItems: "center", gap: "5px",
                 padding: "4px 10px",
-                background: "linear-gradient(135deg, rgba(212,168,71,0.14) 0%, rgba(180,130,10,0.06) 100%)",
-                border: "1px solid rgba(212,168,71,0.30)",
+                background: "linear-gradient(135deg, rgba(212,168,71,0.16) 0%, rgba(180,130,10,0.07) 100%)",
+                border: "1px solid rgba(212,168,71,0.32)",
                 borderRadius: "100px",
                 backdropFilter: "blur(8px)",
               }}
@@ -388,30 +377,63 @@ export function HeroSection() {
               </span>
             </div>
 
-            {/* Event strip — base da imagem */}
+            {/* Container de enquadramento — corte intencional */}
+            {/* Mobile: aspect 1/1.15 → foco em rosto, tronco e mãos */}
+            {/* Desktop: aspect 3/3.8 → cabeça até meio da coxa */}
             <div
-              className="absolute bottom-0 inset-x-0 px-3 py-2.5"
-              style={{ zIndex: 3 }}
+              className="relative overflow-hidden w-full aspect-[1/1.15] sm:aspect-[3/3.4] lg:aspect-[3/3.8]"
+              style={{ zIndex: 1 }}
             >
-              <div className="flex items-center gap-3 flex-wrap">
-                <div className="flex items-center gap-1.5">
-                  <MapPin size={9} style={{ color: "rgba(0,191,255,0.78)", flexShrink: 0 }} />
-                  <span style={{ fontSize: "9.5px", fontWeight: 500, letterSpacing: "0.07em", color: "rgba(255,255,255,0.62)" }}>
-                    SEST SENAT
-                  </span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <Calendar size={9} style={{ color: "rgba(0,191,255,0.78)", flexShrink: 0 }} />
-                  <span style={{ fontSize: "9.5px", fontWeight: 500, letterSpacing: "0.07em", color: "rgba(255,255,255,0.62)" }}>
-                    14 Mai
-                  </span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <Clock size={9} style={{ color: "rgba(0,191,255,0.78)", flexShrink: 0 }} />
-                  <span style={{ fontSize: "9.5px", fontWeight: 500, letterSpacing: "0.07em", color: "rgba(255,255,255,0.62)" }}>
-                    18h – 22h
-                  </span>
-                </div>
+              <img
+                src="/images/leonardo.svg"
+                alt="Leonardo Frota"
+                className="absolute inset-0 w-full h-full"
+                style={{
+                  objectFit: "cover",
+                  /* "top center" mostra topo da imagem (cabeça) — não distorce */
+                  objectPosition: "top center",
+                  /* Leve scale para dar respiro no topo e nas laterais */
+                  transform: "scale(0.96) translateY(1%)",
+                  transformOrigin: "top center",
+                }}
+              />
+
+              {/* Fade na base — integra ao fundo, corte elegante sem linha seca */}
+              <div
+                aria-hidden="true"
+                className="absolute inset-x-0 bottom-0 pointer-events-none"
+                style={{
+                  height: "38%",
+                  background: `linear-gradient(to top, ${BG} 0%, ${BG}CC 18%, ${BG}88 35%, ${BG}44 52%, transparent 72%)`,
+                  zIndex: 2,
+                }}
+              />
+            </div>
+
+            {/* Event strip — separado do fade, fora do container de corte */}
+            <div
+              className="mt-3 flex items-center gap-3 flex-wrap justify-center lg:justify-start"
+              style={{ zIndex: 3, position: "relative" }}
+            >
+              <div className="flex items-center gap-1.5">
+                <MapPin size={9} style={{ color: "rgba(0,191,255,0.78)", flexShrink: 0 }} />
+                <span style={{ fontSize: "9.5px", fontWeight: 500, letterSpacing: "0.07em", color: "rgba(255,255,255,0.55)" }}>
+                  SEST SENAT
+                </span>
+              </div>
+              <div className="h-2 w-px shrink-0" style={{ background: "rgba(255,255,255,0.10)" }} />
+              <div className="flex items-center gap-1.5">
+                <Calendar size={9} style={{ color: "rgba(0,191,255,0.78)", flexShrink: 0 }} />
+                <span style={{ fontSize: "9.5px", fontWeight: 500, letterSpacing: "0.07em", color: "rgba(255,255,255,0.55)" }}>
+                  14 Mai
+                </span>
+              </div>
+              <div className="h-2 w-px shrink-0" style={{ background: "rgba(255,255,255,0.10)" }} />
+              <div className="flex items-center gap-1.5">
+                <Clock size={9} style={{ color: "rgba(0,191,255,0.78)", flexShrink: 0 }} />
+                <span style={{ fontSize: "9.5px", fontWeight: 500, letterSpacing: "0.07em", color: "rgba(255,255,255,0.55)" }}>
+                  18h – 22h
+                </span>
               </div>
             </div>
           </div>
