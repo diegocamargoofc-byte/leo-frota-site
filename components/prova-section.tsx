@@ -30,36 +30,50 @@ function TestimonialCard({
   testimonial,
   index,
   isFeatured = false,
+  isActive,
+  onActivate,
 }: {
   testimonial: typeof testimonials[0]
   index: number
   isFeatured?: boolean
+  isActive: boolean
+  onActivate: (id: number) => void
 }) {
   const videoRef = useRef<HTMLVideoElement>(null)
-  const [isPlaying, setIsPlaying] = useState(false)
   const [isLoaded, setIsLoaded] = useState(false)
+
+  // When this card loses active status, pause the video
+  useEffect(() => {
+    const video = videoRef.current
+    if (!video) return
+    if (!isActive) {
+      video.pause()
+    }
+  }, [isActive])
 
   useEffect(() => {
     const video = videoRef.current
     if (!video) return
-    // loadedmetadata fires much earlier and is enough to show the first frame
     const onLoaded = () => setIsLoaded(true)
-    const onEnded = () => setIsPlaying(false)
+    const onEnded = () => onActivate(-1) // deactivate when done
     video.addEventListener("loadedmetadata", onLoaded)
     video.addEventListener("ended", onEnded)
-    // If metadata already loaded (cached), mark immediately
     if (video.readyState >= 1) setIsLoaded(true)
     return () => {
       video.removeEventListener("loadedmetadata", onLoaded)
       video.removeEventListener("ended", onEnded)
     }
-  }, [])
+  }, [onActivate])
 
   const handlePlay = () => {
     const video = videoRef.current
     if (!video) return
-    video.play().then(() => setIsPlaying(true)).catch(() => {})
+    onActivate(testimonial.id)
+    video.play().catch(() => {})
   }
+
+  // isPlaying drives the overlay visibility — true when this card is active
+  const isPlaying = isActive
 
   const floatClass = (["testimonial-float-a", "testimonial-float-b", "testimonial-float-c"] as const)[index] ?? "testimonial-float-a"
 
@@ -249,6 +263,8 @@ export function ProvaSection() {
   const { ref: titleRef, isVisible: titleVisible } = useScrollAnimation()
   const { ref: cardsRef, isVisible: cardsVisible } = useScrollAnimation()
   const scrollContainerRef = useRef<HTMLDivElement>(null)
+  // -1 means no video is playing
+  const [activeId, setActiveId] = useState<number>(-1)
 
   return (
     <section className="relative bg-[#0a0a0f] py-32 px-6 md:py-44 overflow-hidden">
@@ -314,6 +330,8 @@ export function ProvaSection() {
                 testimonial={testimonial}
                 index={index}
                 isFeatured={index === 1}
+                isActive={activeId === testimonial.id}
+                onActivate={setActiveId}
               />
             ))}
           </div>
@@ -326,6 +344,8 @@ export function ProvaSection() {
                 testimonial={testimonial}
                 index={index}
                 isFeatured={index === 1}
+                isActive={activeId === testimonial.id}
+                onActivate={setActiveId}
               />
             ))}
           </div>
