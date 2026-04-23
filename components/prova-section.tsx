@@ -44,6 +44,7 @@ function TestimonialCard({
 }) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [isLoaded, setIsLoaded] = useState(false)
+  const [thumbSrc, setThumbSrc] = useState(testimonial.poster)
 
   // When this card loses active status, pause the video
   useEffect(() => {
@@ -57,13 +58,48 @@ function TestimonialCard({
   useEffect(() => {
     const video = videoRef.current
     if (!video) return
-    const onLoaded = () => setIsLoaded(true)
-    const onEnded = () => onActivate(-1) // deactivate when done
+
+    const captureFrame = () => {
+      // Seek to 0.5s to avoid black opening frame
+      if (video.readyState >= 2) {
+        video.currentTime = 0.5
+      }
+    }
+
+    const onSeeked = () => {
+      try {
+        const canvas = document.createElement("canvas")
+        canvas.width = video.videoWidth || 360
+        canvas.height = video.videoHeight || 640
+        const ctx = canvas.getContext("2d")
+        if (ctx) {
+          ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
+          const dataUrl = canvas.toDataURL("image/jpeg", 0.85)
+          // Only update if we got a real frame (not a blank canvas)
+          if (dataUrl !== "data:,") setThumbSrc(dataUrl)
+        }
+      } catch (_) {
+        // CORS or other error — keep the static poster fallback
+      }
+      setIsLoaded(true)
+    }
+
+    const onLoaded = () => {
+      setIsLoaded(true)
+      captureFrame()
+    }
+    const onEnded = () => onActivate(-1)
+
     video.addEventListener("loadedmetadata", onLoaded)
+    video.addEventListener("seeked", onSeeked)
     video.addEventListener("ended", onEnded)
-    if (video.readyState >= 1) setIsLoaded(true)
+    if (video.readyState >= 1) {
+      setIsLoaded(true)
+      captureFrame()
+    }
     return () => {
       video.removeEventListener("loadedmetadata", onLoaded)
+      video.removeEventListener("seeked", onSeeked)
       video.removeEventListener("ended", onEnded)
     }
   }, [onActivate])
@@ -169,7 +205,7 @@ function TestimonialCard({
               <video
                 ref={videoRef}
                 src={testimonial.videoUrl}
-                poster={testimonial.poster}
+                poster={thumbSrc}
                 className="absolute inset-0 w-full h-full object-cover"
                 playsInline
                 // @ts-ignore
