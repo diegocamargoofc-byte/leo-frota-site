@@ -346,9 +346,9 @@ export function HeroSection() {
             }}
           />
 
-          {/* Card wrapper — aspect 3:4, proporcão mais cinematográfica */}
+          {/* Card wrapper */}
           <div
-            className="relative w-full aspect-[3/4] max-w-[260px] mx-auto lg:max-w-full lg:mx-0"
+            className="relative w-full aspect-[3/4] max-w-[300px] sm:max-w-[330px] mx-auto lg:max-w-full lg:mx-0"
             style={{
               zIndex: 1,
               animation: mounted ? "hero-card-float 6s ease-in-out infinite" : undefined,
@@ -422,37 +422,20 @@ export function HeroSection() {
                   }}
                 />
 
-                {/* Foto com mask-image — corte invisível, dissolução natural na cintura */}
+                {/* Foto SVG sem fundo — personagem já recortado, nitidez máxima */}
                 <img
-                  src="/images/leonardo.png"
+                  src="/images/leonardo.svg"
                   alt="Leonardo Frota"
-                  className="absolute inset-0 w-full h-full"
+                  className="absolute"
                   style={{
-                    objectFit: "cover",
-                    objectPosition: "top center",
+                    bottom: 0,
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    width: "108%",
+                    height: "auto",
+                    objectFit: "contain",
+                    objectPosition: "bottom center",
                     zIndex: 1,
-                    maskImage: [
-                      "linear-gradient(to top,",
-                      "transparent 0%,",
-                      "transparent 8%,",
-                      "rgba(0,0,0,0.12) 14%,",
-                      "rgba(0,0,0,0.40) 22%,",
-                      "rgba(0,0,0,0.72) 30%,",
-                      "rgba(0,0,0,0.92) 38%,",
-                      "black 48%",
-                      ")",
-                    ].join(" "),
-                    WebkitMaskImage: [
-                      "linear-gradient(to top,",
-                      "transparent 0%,",
-                      "transparent 8%,",
-                      "rgba(0,0,0,0.12) 14%,",
-                      "rgba(0,0,0,0.40) 22%,",
-                      "rgba(0,0,0,0.72) 30%,",
-                      "rgba(0,0,0,0.92) 38%,",
-                      "black 48%",
-                      ")",
-                    ].join(" "),
                   }}
                 />
 
