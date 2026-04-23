@@ -40,33 +40,72 @@ function VideoModal({
   role: string
 }) {
   const videoRef = useRef<HTMLVideoElement>(null)
+  // Save scroll position when modal opens so we can restore on close
+  const savedScrollY = useRef(0)
+  // Touch tracking for swipe-down-to-close
+  const touchStartY = useRef(0)
+  const touchDeltaY = useRef(0)
 
+  // Play video once modal is open
   useEffect(() => {
     if (isOpen && videoRef.current) {
-      videoRef.current.play()
+      videoRef.current.play().catch(() => {/* autoplay may be blocked on some browsers */})
     }
   }, [isOpen])
 
+  // Lock body scroll and save position; restore on close
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose()
     }
     if (isOpen) {
+      savedScrollY.current = window.scrollY
       document.addEventListener("keydown", handleEscape)
+      // Lock scroll without jumping: pin body with top offset
+      document.body.style.position = "fixed"
+      document.body.style.top = `-${savedScrollY.current}px`
+      document.body.style.left = "0"
+      document.body.style.right = "0"
       document.body.style.overflow = "hidden"
     }
     return () => {
       document.removeEventListener("keydown", handleEscape)
-      document.body.style.overflow = "unset"
     }
   }, [isOpen, onClose])
+
+  // Restore scroll position when modal closes
+  const handleClose = () => {
+    document.body.style.position = ""
+    document.body.style.top = ""
+    document.body.style.left = ""
+    document.body.style.right = ""
+    document.body.style.overflow = ""
+    window.scrollTo({ top: savedScrollY.current, behavior: "instant" })
+    onClose()
+  }
+
+  // Swipe-down-to-close handlers (mobile only)
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartY.current = e.touches[0].clientY
+    touchDeltaY.current = 0
+  }
+  const handleTouchMove = (e: React.TouchEvent) => {
+    touchDeltaY.current = e.touches[0].clientY - touchStartY.current
+  }
+  const handleTouchEnd = () => {
+    if (touchDeltaY.current > 80) {
+      handleClose()
+    }
+    touchDeltaY.current = 0
+  }
 
   if (!isOpen) return null
 
   return (
     <div 
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
-      onClick={onClose}
+      className="fixed inset-0 flex items-center justify-center p-4"
+      style={{ zIndex: 9999 }}
+      onClick={handleClose}
     >
       {/* Dark backdrop */}
       <div className="absolute inset-0 bg-black/90 backdrop-blur-sm" />
@@ -75,14 +114,23 @@ function VideoModal({
       <div 
         className="relative z-10 w-full max-w-lg"
         onClick={(e) => e.stopPropagation()}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
       >
-        {/* Close button */}
+        {/* Close button — always visible, large touch target on mobile */}
         <button
-          onClick={onClose}
-          className="absolute -top-12 right-0 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white/80 backdrop-blur-sm transition-all hover:bg-white/20 hover:text-white"
+          onClick={handleClose}
+          className="absolute -top-14 right-0 flex h-12 w-12 items-center justify-center rounded-full bg-white/15 text-white/90 backdrop-blur-sm transition-all hover:bg-white/25 hover:text-white active:scale-95"
+          aria-label="Fechar vídeo"
         >
-          <X className="h-5 w-5" />
+          <X className="h-6 w-6" />
         </button>
+
+        {/* Swipe hint — only shown on touch devices */}
+        <p className="absolute -top-7 left-1/2 -translate-x-1/2 text-[10px] text-white/30 pointer-events-none select-none md:hidden whitespace-nowrap">
+          deslize para baixo para fechar
+        </p>
 
         {/* Video container */}
         <div
@@ -95,7 +143,10 @@ function VideoModal({
             className="w-full aspect-[9/16] object-cover"
             controls
             playsInline
+            // @ts-ignore — webkit-specific attribute to prevent iOS fullscreen takeover
+            webkit-playsinline="true"
             autoPlay
+            preload="auto"
           />
 
           {/* Info footer */}
