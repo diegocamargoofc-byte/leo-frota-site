@@ -334,24 +334,24 @@ export function HeroSection() {
         >
           {/* Wrapper externo — limita largura e faz float */}
           <div
-            className="relative w-full max-w-[300px] sm:max-w-[340px] lg:max-w-full mx-auto lg:mx-0"
+            className="relative w-full max-w-[340px] sm:max-w-[380px] lg:max-w-full mx-auto lg:mx-0"
             style={{
               animation: mounted ? "hero-card-float 6s ease-in-out infinite" : undefined,
               willChange: "transform",
             }}
           >
-            {/* Glow de silhueta — posicionado atrás do corpo, não do container */}
+            {/* Glow de silhueta — mais intenso para destacar o corpo */}
             <div
               aria-hidden="true"
               className="absolute pointer-events-none"
               style={{
-                top: "8%",
+                top: "6%",
                 left: "50%",
                 transform: "translateX(-50%)",
-                width: "75%",
-                height: "78%",
-                background: "radial-gradient(ellipse 60% 65% at 50% 42%, rgba(0,100,220,0.20) 0%, rgba(0,60,160,0.09) 52%, transparent 78%)",
-                filter: "blur(36px)",
+                width: "85%",
+                height: "82%",
+                background: "radial-gradient(ellipse 65% 70% at 50% 40%, rgba(0,110,240,0.30) 0%, rgba(0,70,180,0.14) 48%, transparent 76%)",
+                filter: "blur(38px)",
                 zIndex: 0,
               }}
             />
@@ -378,10 +378,10 @@ export function HeroSection() {
             </div>
 
             {/* Container de enquadramento — corte intencional */}
-            {/* Mobile: aspect 1/1.15 → foco em rosto, tronco e mãos */}
+            {/* Mobile: aspect mais alto → mais corpo visível */}
             {/* Desktop: aspect 3/3.8 → cabeça até meio da coxa */}
             <div
-              className="relative overflow-hidden w-full aspect-[1/1.15] sm:aspect-[3/3.4] lg:aspect-[3/3.8]"
+              className="relative overflow-hidden w-full aspect-[3/3.6] sm:aspect-[3/3.6] lg:aspect-[3/3.8]"
               style={{ zIndex: 1 }}
             >
               <img
@@ -390,10 +390,9 @@ export function HeroSection() {
                 className="absolute inset-0 w-full h-full"
                 style={{
                   objectFit: "cover",
-                  /* "top center" mostra topo da imagem (cabeça) — não distorce */
                   objectPosition: "top center",
-                  /* Leve scale para dar respiro no topo e nas laterais */
-                  transform: "scale(0.96) translateY(1%)",
+                  /* Scale 1.12 → personagem maior, mais dominante */
+                  transform: "scale(1.12) translateY(2%)",
                   transformOrigin: "top center",
                 }}
               />
@@ -406,6 +405,15 @@ export function HeroSection() {
                   height: "38%",
                   background: `linear-gradient(to top, ${BG} 0%, ${BG}CC 18%, ${BG}88 35%, ${BG}44 52%, transparent 72%)`,
                   zIndex: 2,
+                }}
+              />
+              {/* Vinheta lateral — escurece bordas para destacar silhueta */}
+              <div
+                aria-hidden="true"
+                className="absolute inset-0 pointer-events-none"
+                style={{
+                  background: `radial-gradient(ellipse 70% 85% at 50% 42%, transparent 52%, rgba(0,0,0,0.38) 100%)`,
+                  zIndex: 3,
                 }}
               />
             </div>
