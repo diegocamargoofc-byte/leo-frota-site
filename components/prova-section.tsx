@@ -171,18 +171,20 @@ function TestimonialCard({
                     className="absolute inset-0 pointer-events-none"
                     style={{
                       background: "radial-gradient(ellipse 88% 100% at 50% 50%, transparent 52%, rgba(0,0,0,0.48) 100%)",
+                      zIndex: 1,
                     }}
                   />
 
                   {/* Bottom gradient */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#030308]/88 via-[#030308]/14 to-transparent pointer-events-none" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#030308]/88 via-[#030308]/14 to-transparent pointer-events-none" style={{ zIndex: 1 }} />
 
                   {/* Top edge vignette */}
-                  <div className="absolute inset-x-0 top-0 h-14 bg-gradient-to-b from-black/30 to-transparent pointer-events-none" />
+                  <div className="absolute inset-x-0 top-0 h-14 bg-gradient-to-b from-black/30 to-transparent pointer-events-none" style={{ zIndex: 1 }} />
 
-                  {/* Play button */}
+                  {/* Play button — z-20 garante que fica acima de todos os overlays */}
                   <button
                     className="absolute inset-0 flex items-center justify-center w-full h-full"
+                    style={{ zIndex: 20 }}
                     onClick={handlePlay}
                     aria-label={`Assistir depoimento de ${testimonial.name}`}
                   >
@@ -224,7 +226,7 @@ function TestimonialCard({
                   </button>
 
                   {/* Name / company — hidden once playing */}
-                  <div className="absolute bottom-0 inset-x-0 p-6 pt-16 pointer-events-none">
+                  <div className="absolute bottom-0 inset-x-0 p-6 pt-16 pointer-events-none" style={{ zIndex: 2 }}>
                     <p className="text-[15px] font-bold text-white leading-tight tracking-[-0.01em]">
                       {testimonial.name}
                     </p>
