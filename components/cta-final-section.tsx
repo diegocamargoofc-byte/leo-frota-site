@@ -150,7 +150,7 @@ export function CtaFinalSection() {
           </div>
 
           <p className="mt-7 text-sm" style={{ color: "rgba(255,255,255,0.35)" }}>
-            Vagas limitadas. Primeiro lote com o menor valor.
+            Vagas limitadas. Primeiro lote pelo menor valor disponível.
           </p>
         </div>
 
@@ -160,8 +160,6 @@ export function CtaFinalSection() {
           style={{ fontSize: "0.68rem", letterSpacing: "0.16em", textTransform: "uppercase", fontWeight: 600, color: "rgba(255,255,255,0.28)" }}
         >
           <span>Pagamento seguro</span>
-          <div style={{ width: "1px", height: "12px", background: "rgba(255,255,255,0.10)" }} />
-          <span>Garantia de reembolso</span>
           <div style={{ width: "1px", height: "12px", background: "rgba(255,255,255,0.10)" }} />
           <span>Suporte dedicado</span>
         </div>

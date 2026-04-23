@@ -8,7 +8,7 @@ const testimonials = [
   {
     id: 1,
     name: "Marcos Paulos",
-    role: "Mways Logistica",
+    role: "Mways Logística",
     videoUrl: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Design%20sem%20nome%20%287%29-bZSt8GLkF0e4r4mMDrTjPLx2veoqsi.mp4",
   },
   {

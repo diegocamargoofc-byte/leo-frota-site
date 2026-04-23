@@ -4,10 +4,10 @@ import { useScrollAnimation } from "@/hooks/use-scroll-animation"
 
 // Icon imports removed — credentials as pure typography, not LinkedIn-style icon cards.
 const credentials = [
-  "+500 profissionais transformados",
+  "+500 profissionais impactados",
   "12 anos de experiência em posicionamento",
   "Palestrante em eventos nacionais",
-  "Especialista em imagem profissional",
+  "Especialista em imagem e presença profissional",
 ]
 
 export function AutoridadeSection() {

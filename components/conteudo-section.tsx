@@ -6,27 +6,27 @@ import { useScrollAnimation } from "@/hooks/use-scroll-animation"
 const contents = [
   {
     title: "Posicionamento Estratégico",
-    description: "Defina seu território no mercado",
+    description: "Defina seu espaço no mercado com clareza",
   },
   {
     title: "Percepção de Valor",
-    description: "Como ser visto como autoridade",
+    description: "Como ser reconhecido como referência",
   },
   {
     title: "Comunicação de Impacto",
-    description: "Fale para quem precisa ouvir",
+    description: "Fale diretamente para quem precisa ouvir",
   },
   {
     title: "Atração de Oportunidades",
-    description: "Clientes vindo até você",
+    description: "Faça os clientes chegarem até você",
   },
   {
     title: "Networking Estratégico",
-    description: "Conexões que geram negócios",
+    description: "Conexões que geram negócios reais",
   },
   {
     title: "Ação Imediata",
-    description: "Saia aplicando no mesmo dia",
+    description: "Saia do evento já aplicando o que aprendeu",
   },
 ]
 

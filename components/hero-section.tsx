@@ -186,7 +186,7 @@ export function HeroSection() {
               color: "rgba(255,255,255,0.44)", marginBottom: "6px",
               ...headlineUp(80, 600),
             }}>
-              Sua imagem pode estar
+              A sua imagem pode estar
             </p>
 
             <h1 style={{ margin: 0 }}>
@@ -241,9 +241,9 @@ export function HeroSection() {
           }}>
             Em{" "}
             <strong style={{ color: "rgba(255,255,255,0.72)", fontWeight: 600 }}>4 horas</strong>
-            , você aprende a se posicionar como{" "}
+            {", "}você aprende a se posicionar como{" "}
             <strong style={{ color: "rgba(90,210,255,0.78)", fontWeight: 600 }}>autoridade</strong>{" "}
-            e atrair oportunidades de alto valor — todos os dias.
+            e a atrair oportunidades de alto valor — todos os dias.
           </p>
 
           {/* CTA */}
