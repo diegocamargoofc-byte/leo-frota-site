@@ -42,12 +42,15 @@ function TestimonialCard({
   useEffect(() => {
     const video = videoRef.current
     if (!video) return
+    // loadedmetadata fires much earlier and is enough to show the first frame
     const onLoaded = () => setIsLoaded(true)
     const onEnded = () => setIsPlaying(false)
-    video.addEventListener("loadeddata", onLoaded)
+    video.addEventListener("loadedmetadata", onLoaded)
     video.addEventListener("ended", onEnded)
+    // If metadata already loaded (cached), mark immediately
+    if (video.readyState >= 1) setIsLoaded(true)
     return () => {
-      video.removeEventListener("loadeddata", onLoaded)
+      video.removeEventListener("loadedmetadata", onLoaded)
       video.removeEventListener("ended", onEnded)
     }
   }, [])
@@ -138,7 +141,7 @@ function TestimonialCard({
             {/* Video area */}
             <div className="aspect-[9/16] w-full relative overflow-hidden bg-[#090910]">
 
-              {/* Loading spinner — shown until video metadata loads */}
+              {/* Loading spinner — shown only until first frame is ready */}
               {!isLoaded && (
                 <div className="absolute inset-0 flex items-center justify-center z-10">
                   <div className="w-5 h-5 rounded-full border border-white/10 border-t-white/35 animate-spin" />
@@ -153,12 +156,10 @@ function TestimonialCard({
                 playsInline
                 // @ts-ignore
                 webkit-playsinline="true"
-                x-webkit-airplay="deny"
-                preload="auto"
+                preload="metadata"
                 controls={isPlaying}
                 disablePictureInPicture
                 controlsList="nodownload nofullscreen noremoteplayback"
-                style={{ opacity: isLoaded ? 1 : 0, transition: "opacity 0.3s" }}
               />
 
               {/* Overlays — only shown when NOT playing */}
