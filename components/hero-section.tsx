@@ -147,7 +147,7 @@ export function HeroSection() {
           Grid garante largura explícita para cada coluna —
           sem risco de texto comprimido ou card ocupando tudo.
       ══════════════════════════════════════════ */}
-      <div className="relative z-10 grid grid-cols-1 lg:grid-cols-[1fr_360px] xl:grid-cols-[1fr_380px] lg:items-center px-6 sm:px-8 lg:px-12 xl:px-16 py-8 lg:py-0 gap-8 lg:gap-8 xl:gap-10 max-w-[1100px] xl:max-w-[1200px] mx-auto w-full">
+      <div className="relative z-10 grid grid-cols-1 lg:grid-cols-[1fr_360px] xl:grid-cols-[1fr_380px] lg:items-center px-4 sm:px-6 lg:px-12 xl:px-16 pt-0 pb-4 lg:py-0 gap-2 lg:gap-8 xl:gap-10 max-w-[1100px] xl:max-w-[1200px] mx-auto w-full">
 
         {/* ── TEXT COLUMN ─────────────────────────── */}
         <div className="relative z-20 order-2 lg:order-1 flex flex-col justify-center lg:py-14">
@@ -329,18 +329,18 @@ export function HeroSection() {
 
         {/* ── IMAGE COLUMN ── */}
         <div
-          className="order-1 lg:order-2 relative flex flex-col justify-end lg:justify-end items-center lg:items-end"
+          className="order-1 lg:order-2 relative flex flex-col justify-end items-center lg:items-end min-h-[72svh] sm:min-h-[78svh] lg:min-h-0"
           style={cardEntrance}
         >
-          {/* Wrapper externo — limita largura e faz float */}
+          {/* Wrapper — sem max-w no mobile, escala livre */}
           <div
-            className="relative w-full max-w-[340px] sm:max-w-[380px] lg:max-w-full mx-auto lg:mx-0"
+            className="relative w-full lg:mx-0"
             style={{
               animation: mounted ? "hero-card-float 6s ease-in-out infinite" : undefined,
               willChange: "transform",
             }}
           >
-            {/* Glow de silhueta — mais intenso para destacar o corpo */}
+            {/* Glow de silhueta */}
             <div
               aria-hidden="true"
               className="absolute pointer-events-none"
@@ -349,14 +349,14 @@ export function HeroSection() {
                 left: "50%",
                 transform: "translateX(-50%)",
                 width: "85%",
-                height: "82%",
-                background: "radial-gradient(ellipse 65% 70% at 50% 40%, rgba(0,110,240,0.30) 0%, rgba(0,70,180,0.14) 48%, transparent 76%)",
-                filter: "blur(38px)",
+                height: "80%",
+                background: "radial-gradient(ellipse 65% 70% at 50% 40%, rgba(0,110,240,0.28) 0%, rgba(0,70,180,0.12) 50%, transparent 76%)",
+                filter: "blur(40px)",
                 zIndex: 0,
               }}
             />
 
-            {/* Authority badge — topo direito, fora do container de corte */}
+            {/* Authority badge */}
             <div
               style={{
                 position: "absolute", top: "4%", right: "2%", zIndex: 10,
@@ -377,12 +377,15 @@ export function HeroSection() {
               </span>
             </div>
 
-            {/* Container de enquadramento — corte intencional */}
-            {/* Mobile: aspect mais alto → mais corpo visível */}
-            {/* Desktop: aspect 3/3.8 → cabeça até meio da coxa */}
+            {/* Container de enquadramento — sem aspect-ratio fixo, altura livre */}
             <div
-              className="relative overflow-hidden w-full aspect-[3/3.6] sm:aspect-[3/3.6] lg:aspect-[3/3.8]"
-              style={{ zIndex: 1 }}
+              className="relative overflow-hidden w-full"
+              style={{
+                /* Mobile: ocupa a coluna inteira (min-h vem do pai) */
+                /* Desktop: aspect fixo mantém o enquadramento correto */
+                aspectRatio: "3 / 3.8",
+                zIndex: 1,
+              }}
             >
               <img
                 src="/images/leonardo.svg"
@@ -391,34 +394,33 @@ export function HeroSection() {
                 style={{
                   objectFit: "cover",
                   objectPosition: "top center",
-                  /* Scale 1.12 → personagem maior, mais dominante */
-                  transform: "scale(1.12) translateY(2%)",
+                  transform: "scale(1.35) translateY(3%)",
                   transformOrigin: "top center",
                 }}
               />
 
-              {/* Fade na base — integra ao fundo, corte elegante sem linha seca */}
+              {/* Fade na base */}
               <div
                 aria-hidden="true"
                 className="absolute inset-x-0 bottom-0 pointer-events-none"
                 style={{
-                  height: "38%",
-                  background: `linear-gradient(to top, ${BG} 0%, ${BG}CC 18%, ${BG}88 35%, ${BG}44 52%, transparent 72%)`,
+                  height: "40%",
+                  background: `linear-gradient(to top, ${BG} 0%, ${BG}CC 20%, ${BG}88 38%, ${BG}44 55%, transparent 75%)`,
                   zIndex: 2,
                 }}
               />
-              {/* Vinheta lateral — escurece bordas para destacar silhueta */}
+              {/* Vinheta lateral */}
               <div
                 aria-hidden="true"
                 className="absolute inset-0 pointer-events-none"
                 style={{
-                  background: `radial-gradient(ellipse 70% 85% at 50% 42%, transparent 52%, rgba(0,0,0,0.38) 100%)`,
+                  background: "radial-gradient(ellipse 70% 85% at 50% 42%, transparent 52%, rgba(0,0,0,0.35) 100%)",
                   zIndex: 3,
                 }}
               />
             </div>
 
-            {/* Event strip — separado do fade, fora do container de corte */}
+            {/* Event strip */}
             <div
               className="mt-3 flex items-center gap-3 flex-wrap justify-center lg:justify-start"
               style={{ zIndex: 3, position: "relative" }}
