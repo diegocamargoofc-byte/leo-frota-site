@@ -10,21 +10,18 @@ const testimonials = [
     name: "Marcos Paulos",
     role: "Mways Logística",
     videoUrl: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Design%20sem%20nome%20%287%29-bZSt8GLkF0e4r4mMDrTjPLx2veoqsi.mp4",
-    poster: "/images/thumb-marcos.jpg",
   },
   {
     id: 2,
     name: "Jorge Alves",
     role: "Corretora de Seguros",
     videoUrl: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Design%20sem%20nome%20%286%29-fJlTSkbDfZMdGXKUcFoAlAWhNOBHZa.mp4",
-    poster: "/images/thumb-jorge.jpg",
   },
   {
     id: 3,
     name: "Rayssa Castro",
     role: "Axia Contabilidade",
     videoUrl: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/download-ixuRYvzMwJKBkAqMtqhRmUbKzwbUYp.mp4",
-    poster: "/images/thumb-rayssa.jpg",
   },
 ]
 
@@ -44,7 +41,8 @@ function TestimonialCard({
 }) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [isLoaded, setIsLoaded] = useState(false)
-  const [thumbSrc, setThumbSrc] = useState(testimonial.poster)
+  // Append #t=1 so the browser seeks to 1s as the initial displayed frame (works on iOS Safari without CORS issues)
+  const posterSrc = `${testimonial.videoUrl}#t=1`
 
   // When this card loses active status, pause the video
   useEffect(() => {
@@ -58,48 +56,13 @@ function TestimonialCard({
   useEffect(() => {
     const video = videoRef.current
     if (!video) return
-
-    const captureFrame = () => {
-      // Seek to 0.5s to avoid black opening frame
-      if (video.readyState >= 2) {
-        video.currentTime = 0.5
-      }
-    }
-
-    const onSeeked = () => {
-      try {
-        const canvas = document.createElement("canvas")
-        canvas.width = video.videoWidth || 360
-        canvas.height = video.videoHeight || 640
-        const ctx = canvas.getContext("2d")
-        if (ctx) {
-          ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
-          const dataUrl = canvas.toDataURL("image/jpeg", 0.85)
-          // Only update if we got a real frame (not a blank canvas)
-          if (dataUrl !== "data:,") setThumbSrc(dataUrl)
-        }
-      } catch (_) {
-        // CORS or other error — keep the static poster fallback
-      }
-      setIsLoaded(true)
-    }
-
-    const onLoaded = () => {
-      setIsLoaded(true)
-      captureFrame()
-    }
+    const onLoaded = () => setIsLoaded(true)
     const onEnded = () => onActivate(-1)
-
     video.addEventListener("loadedmetadata", onLoaded)
-    video.addEventListener("seeked", onSeeked)
     video.addEventListener("ended", onEnded)
-    if (video.readyState >= 1) {
-      setIsLoaded(true)
-      captureFrame()
-    }
+    if (video.readyState >= 1) setIsLoaded(true)
     return () => {
       video.removeEventListener("loadedmetadata", onLoaded)
-      video.removeEventListener("seeked", onSeeked)
       video.removeEventListener("ended", onEnded)
     }
   }, [onActivate])
@@ -205,7 +168,7 @@ function TestimonialCard({
               <video
                 ref={videoRef}
                 src={testimonial.videoUrl}
-                poster={thumbSrc}
+                poster={posterSrc}
                 className="absolute inset-0 w-full h-full object-cover"
                 playsInline
                 // @ts-ignore
