@@ -12,17 +12,17 @@ const faqs = [
   {
     question: "Preciso ter experiência prévia com marketing?",
     answer:
-      "Não. O evento foi desenhado para profissionais que querem construir autoridade de forma autêntica, sem depender de técnicas complexas de marketing digital.",
+      "Não. O evento foi pensado para profissionais que querem construir autoridade de forma autêntica, sem depender de técnicas complexas de marketing digital.",
   },
   {
     question: "O evento é presencial ou online?",
     answer:
-      "O evento é 100% presencial. Acreditamos que a transformação real acontece quando você está presente, focado e conectado com outros profissionais que compartilham os mesmos objetivos.",
+      "O evento é 100% presencial. Acreditamos que a transformação real acontece quando você está presente, focado e em contato direto com outros profissionais que compartilham os mesmos objetivos.",
   },
   {
     question: "E se eu não puder comparecer?",
     answer:
-      "Caso tenha algum imprevisto, entre em contato conosco até 7 dias antes do evento para solicitar reembolso integral ou transferência para a próxima edição.",
+      "Em caso de imprevisto, entre em contato conosco até 7 dias antes do evento para solicitar reembolso integral ou transferência para a próxima edição.",
   },
 ]
 

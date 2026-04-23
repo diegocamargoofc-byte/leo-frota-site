@@ -152,12 +152,12 @@ export function OfertaSection() {
 
             {/* Social proof — icon removed */}
             <p className="mt-5 text-center text-sm text-white/42">
-              +500 profissionais já transformaram sua imagem
+              +500 profissionais já transformaram a própria imagem
             </p>
 
             {/* Minimal trust line — replaces the generic Shield footer stripe */}
             <p className="mt-3 text-center text-xs text-white/28 tracking-wide">
-              Pagamento seguro · 7 dias de garantia
+              Pagamento seguro · Garantia de 7 dias
             </p>
 
           </div>

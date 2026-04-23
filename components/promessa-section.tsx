@@ -3,10 +3,10 @@
 import { useScrollAnimation } from "@/hooks/use-scroll-animation"
 
 const promises = [
-  "Clareza absoluta do seu posicionamento",
+  "Clareza total sobre o seu posicionamento",
   "Diagnóstico completo da sua imagem atual",
-  "Ajustes práticos para aplicar imediatamente",
-  "Como parar de depender de indicação",
+  "Ajustes práticos para aplicar no mesmo dia",
+  "Como deixar de depender exclusivamente de indicações",
 ]
 
 export function PromessaSection() {

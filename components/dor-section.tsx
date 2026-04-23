@@ -140,9 +140,9 @@ export function DorSection() {
 
         {/* Payoff — the revelation. Full scale, full weight. */}
         <p
-          className="scroll-item stagger-3 px-6 sm:px-8 lg:px-12 xl:px-20 font-black tracking-[-0.04em] leading-[0.88]"
+          className="scroll-item stagger-3 px-6 sm:px-8 lg:px-12 xl:px-20 font-black tracking-[-0.04em] leading-[0.88] whitespace-nowrap"
           style={{
-            fontSize: "clamp(3.8rem, 11vw, 9.5rem)",
+            fontSize: "clamp(1.6rem, 8.5vw, 9.5rem)",
             background: "linear-gradient(135deg, #67e8f9 0%, #38bdf8 50%, #818cf8 100%)",
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
