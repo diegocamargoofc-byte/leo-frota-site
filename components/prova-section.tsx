@@ -30,33 +30,50 @@ function TestimonialCard({
   testimonial,
   index,
   isFeatured = false,
+  isActive,
+  onActivate,
 }: {
   testimonial: typeof testimonials[0]
   index: number
   isFeatured?: boolean
+  isActive: boolean
+  onActivate: (id: number) => void
 }) {
   const videoRef = useRef<HTMLVideoElement>(null)
-  const [isPlaying, setIsPlaying] = useState(false)
   const [isLoaded, setIsLoaded] = useState(false)
+
+  // When this card loses active status, pause the video
+  useEffect(() => {
+    const video = videoRef.current
+    if (!video) return
+    if (!isActive) {
+      video.pause()
+    }
+  }, [isActive])
 
   useEffect(() => {
     const video = videoRef.current
     if (!video) return
     const onLoaded = () => setIsLoaded(true)
-    const onEnded = () => setIsPlaying(false)
-    video.addEventListener("loadeddata", onLoaded)
+    const onEnded = () => onActivate(-1) // deactivate when done
+    video.addEventListener("loadedmetadata", onLoaded)
     video.addEventListener("ended", onEnded)
+    if (video.readyState >= 1) setIsLoaded(true)
     return () => {
-      video.removeEventListener("loadeddata", onLoaded)
+      video.removeEventListener("loadedmetadata", onLoaded)
       video.removeEventListener("ended", onEnded)
     }
-  }, [])
+  }, [onActivate])
 
   const handlePlay = () => {
     const video = videoRef.current
     if (!video) return
-    video.play().then(() => setIsPlaying(true)).catch(() => {})
+    onActivate(testimonial.id)
+    video.play().catch(() => {})
   }
+
+  // isPlaying drives the overlay visibility — true when this card is active
+  const isPlaying = isActive
 
   const floatClass = (["testimonial-float-a", "testimonial-float-b", "testimonial-float-c"] as const)[index] ?? "testimonial-float-a"
 
@@ -138,7 +155,7 @@ function TestimonialCard({
             {/* Video area */}
             <div className="aspect-[9/16] w-full relative overflow-hidden bg-[#090910]">
 
-              {/* Loading spinner — shown until video metadata loads */}
+              {/* Loading spinner — shown only until first frame is ready */}
               {!isLoaded && (
                 <div className="absolute inset-0 flex items-center justify-center z-10">
                   <div className="w-5 h-5 rounded-full border border-white/10 border-t-white/35 animate-spin" />
@@ -155,7 +172,8 @@ function TestimonialCard({
                 webkit-playsinline="true"
                 preload="metadata"
                 controls={isPlaying}
-                style={{ opacity: isLoaded ? 1 : 0, transition: "opacity 0.3s" }}
+                disablePictureInPicture
+                controlsList="nodownload nofullscreen noremoteplayback"
               />
 
               {/* Overlays — only shown when NOT playing */}
@@ -167,18 +185,20 @@ function TestimonialCard({
                     className="absolute inset-0 pointer-events-none"
                     style={{
                       background: "radial-gradient(ellipse 88% 100% at 50% 50%, transparent 52%, rgba(0,0,0,0.48) 100%)",
+                      zIndex: 1,
                     }}
                   />
 
                   {/* Bottom gradient */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#030308]/88 via-[#030308]/14 to-transparent pointer-events-none" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#030308]/88 via-[#030308]/14 to-transparent pointer-events-none" style={{ zIndex: 1 }} />
 
                   {/* Top edge vignette */}
-                  <div className="absolute inset-x-0 top-0 h-14 bg-gradient-to-b from-black/30 to-transparent pointer-events-none" />
+                  <div className="absolute inset-x-0 top-0 h-14 bg-gradient-to-b from-black/30 to-transparent pointer-events-none" style={{ zIndex: 1 }} />
 
-                  {/* Play button */}
+                  {/* Play button — z-20 garante que fica acima de todos os overlays */}
                   <button
                     className="absolute inset-0 flex items-center justify-center w-full h-full"
+                    style={{ zIndex: 20 }}
                     onClick={handlePlay}
                     aria-label={`Assistir depoimento de ${testimonial.name}`}
                   >
@@ -220,7 +240,7 @@ function TestimonialCard({
                   </button>
 
                   {/* Name / company — hidden once playing */}
-                  <div className="absolute bottom-0 inset-x-0 p-6 pt-16 pointer-events-none">
+                  <div className="absolute bottom-0 inset-x-0 p-6 pt-16 pointer-events-none" style={{ zIndex: 2 }}>
                     <p className="text-[15px] font-bold text-white leading-tight tracking-[-0.01em]">
                       {testimonial.name}
                     </p>
@@ -243,6 +263,8 @@ export function ProvaSection() {
   const { ref: titleRef, isVisible: titleVisible } = useScrollAnimation()
   const { ref: cardsRef, isVisible: cardsVisible } = useScrollAnimation()
   const scrollContainerRef = useRef<HTMLDivElement>(null)
+  // -1 means no video is playing
+  const [activeId, setActiveId] = useState<number>(-1)
 
   return (
     <section className="relative bg-[#0a0a0f] py-32 px-6 md:py-44 overflow-hidden">
@@ -308,6 +330,8 @@ export function ProvaSection() {
                 testimonial={testimonial}
                 index={index}
                 isFeatured={index === 1}
+                isActive={activeId === testimonial.id}
+                onActivate={setActiveId}
               />
             ))}
           </div>
@@ -320,6 +344,8 @@ export function ProvaSection() {
                 testimonial={testimonial}
                 index={index}
                 isFeatured={index === 1}
+                isActive={activeId === testimonial.id}
+                onActivate={setActiveId}
               />
             ))}
           </div>
