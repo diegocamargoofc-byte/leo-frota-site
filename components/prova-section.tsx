@@ -10,18 +10,21 @@ const testimonials = [
     name: "Marcos Paulos",
     role: "Mways Logística",
     videoUrl: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Design%20sem%20nome%20%287%29-bZSt8GLkF0e4r4mMDrTjPLx2veoqsi.mp4",
+    poster: "/images/thumb-marcos.jpg",
   },
   {
     id: 2,
     name: "Jorge Alves",
     role: "Corretora de Seguros",
     videoUrl: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Design%20sem%20nome%20%286%29-fJlTSkbDfZMdGXKUcFoAlAWhNOBHZa.mp4",
+    poster: "/images/thumb-jorge.jpg",
   },
   {
     id: 3,
     name: "Rayssa Castro",
     role: "Axia Contabilidade",
     videoUrl: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/download-ixuRYvzMwJKBkAqMtqhRmUbKzwbUYp.mp4",
+    poster: "/images/thumb-rayssa.jpg",
   },
 ]
 
@@ -166,6 +169,7 @@ function TestimonialCard({
               <video
                 ref={videoRef}
                 src={testimonial.videoUrl}
+                poster={testimonial.poster}
                 className="absolute inset-0 w-full h-full object-cover"
                 playsInline
                 // @ts-ignore
