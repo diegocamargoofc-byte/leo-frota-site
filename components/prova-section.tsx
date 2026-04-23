@@ -153,8 +153,11 @@ function TestimonialCard({
                 playsInline
                 // @ts-ignore
                 webkit-playsinline="true"
-                preload="metadata"
+                x-webkit-airplay="deny"
+                preload="auto"
                 controls={isPlaying}
+                disablePictureInPicture
+                controlsList="nodownload nofullscreen noremoteplayback"
                 style={{ opacity: isLoaded ? 1 : 0, transition: "opacity 0.3s" }}
               />
 
