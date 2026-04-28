@@ -10,18 +10,21 @@ const testimonials = [
     name: "Marcos Paulos",
     role: "Mways Logística",
     videoUrl: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Design%20sem%20nome%20%287%29-bZSt8GLkF0e4r4mMDrTjPLx2veoqsi.mp4",
+    poster: "/images/thumb-marcos.jpg",
   },
   {
     id: 2,
     name: "Jorge Alves",
     role: "Corretora de Seguros",
     videoUrl: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Design%20sem%20nome%20%286%29-fJlTSkbDfZMdGXKUcFoAlAWhNOBHZa.mp4",
+    poster: "/images/thumb-jorge.jpg",
   },
   {
     id: 3,
     name: "Rayssa Castro",
     role: "Axia Contabilidade",
     videoUrl: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/download-ixuRYvzMwJKBkAqMtqhRmUbKzwbUYp.mp4",
+    poster: "/images/thumb-rayssa.jpg",
   },
 ]
 
@@ -41,8 +44,6 @@ function TestimonialCard({
 }) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [isLoaded, setIsLoaded] = useState(false)
-  // Append #t=1 so the browser seeks to 1s as the initial displayed frame (works on iOS Safari without CORS issues)
-  const posterSrc = `${testimonial.videoUrl}#t=1`
 
   // When this card loses active status, pause the video
   useEffect(() => {
@@ -168,12 +169,12 @@ function TestimonialCard({
               <video
                 ref={videoRef}
                 src={testimonial.videoUrl}
-                poster={posterSrc}
+                poster={testimonial.poster}
                 className="absolute inset-0 w-full h-full object-cover"
                 playsInline
                 // @ts-ignore
                 webkit-playsinline="true"
-                preload="metadata"
+                preload="none"
                 controls={isPlaying}
                 disablePictureInPicture
                 controlsList="nodownload nofullscreen noremoteplayback"
