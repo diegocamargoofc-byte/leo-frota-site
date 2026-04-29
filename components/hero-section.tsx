@@ -124,7 +124,7 @@ export function HeroSection() {
           className="absolute left-1/2 -translate-x-1/2 hidden md:flex items-center gap-3"
           style={{ fontSize: "9.5px", fontWeight: 500, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(255,255,255,0.30)" }}
         >
-          <span>14 Mai 2026</span>
+          <span>28 Mai 2026</span>
           <span style={{ color: "rgba(255,255,255,0.12)" }}>·</span>
           <span>SEST SENAT</span>
           <span style={{ color: "rgba(255,255,255,0.12)" }}>·</span>
@@ -318,7 +318,7 @@ export function HeroSection() {
                   R$197
                 </span>
                 <span style={{ fontSize: "10px", color: "rgba(255,255,255,0.26)", letterSpacing: "0.03em" }}>
-                  ou 12× de R$18,78
+                  ou 12�� de R$18,78
                 </span>
               </div>
             </div>
@@ -435,7 +435,7 @@ export function HeroSection() {
               <div className="flex items-center gap-1.5">
                 <Calendar size={9} style={{ color: "rgba(0,191,255,0.78)", flexShrink: 0 }} />
                 <span style={{ fontSize: "9.5px", fontWeight: 500, letterSpacing: "0.07em", color: "rgba(255,255,255,0.55)" }}>
-                  14 Mai
+                  28 Mai
                 </span>
               </div>
               <div className="h-2 w-px shrink-0" style={{ background: "rgba(255,255,255,0.10)" }} />
