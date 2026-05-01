@@ -209,9 +209,6 @@ export function HeroSection() {
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
                 ...headlineUp(290, 800),
-                ...(mounted && {
-                  animation: `headline-fade-up 800ms cubic-bezier(0.22,1,0.36,1) 290ms both, gradient-shift 5s ease 1200ms infinite`,
-                }),
               }}>
                 clientes
               </span>
@@ -250,14 +247,13 @@ export function HeroSection() {
           <div style={fade(880, 680)}>
             {/* Button wrapper — carries the pulsing ring */}
             <div className="relative inline-flex w-full sm:w-auto">
-              {/* Pulsing urgency ring */}
+              {/* Static border accent — removed pulsing ring for mobile perf */}
               <div
                 aria-hidden="true"
                 style={{
                   position: "absolute", inset: "-5px",
                   borderRadius: "17px",
-                  border: "1px solid rgba(212,168,71,0.35)",
-                  animation: "cta-ping-ring 2.6s ease-out infinite",
+                  border: "1px solid rgba(212,168,71,0.18)",
                   pointerEvents: "none",
                 }}
               />
@@ -305,7 +301,6 @@ export function HeroSection() {
                 <div className="h-1.5 w-1.5 shrink-0 rounded-full" style={{
                   background: "#FF5757",
                   boxShadow: "0 0 5px rgba(255,80,80,0.6)",
-                  animation: "glow-pulse 2.5s ease-in-out infinite",
                 }} />
                 <span style={{ fontSize: "11px", color: "rgba(255,255,255,0.40)", letterSpacing: "0.04em" }}>
                   Vagas limitadas
@@ -336,8 +331,7 @@ export function HeroSection() {
           <div
             className="relative w-full lg:mx-0"
             style={{
-              animation: mounted ? "hero-card-float 6s ease-in-out infinite" : undefined,
-              willChange: "transform",
+              willChange: "auto",
             }}
           >
             {/* Glow de silhueta */}
